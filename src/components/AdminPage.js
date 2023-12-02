@@ -1,14 +1,37 @@
-import * as React from 'react';
+// AdminPage.js
+
+import React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useUser } from '../context/user/user.context';
 
 const AdminPage = () => {
+  const { user, logout } = useUser();
+
+  const handleLogout = () => {
+    logout();
+    console.log('Logout clicked');
+  };
+
   return (
     <div className="admin-page">
+      <div className="user-info">
+        {user && (
+          <>
+            <Typography variant="body1" color="text.primary" style={{ marginRight: '16px' }}>
+              Welcome, {user.username}
+            </Typography>
+            <Button variant="outlined" color="primary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </>
+        )}
+      </div>
+
+      {/* Existing card components remain unchanged */}
       <CardContainer
         title="Manage Users"
         titleStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#4CAF50' }}
