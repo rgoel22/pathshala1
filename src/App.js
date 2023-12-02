@@ -5,6 +5,7 @@ import { RouterContext } from "./context/routing/router.context";
 import { UserContext } from "./context/user/user.context";
 import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
+import SignIn from "./components/Signin";
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -98,6 +99,7 @@ function App() {
       <UserProvider>
         <CoursesProvider>
           <PathShala />
+          <SignIn />
         </CoursesProvider>
       </UserProvider>
     </RouterProvider>
