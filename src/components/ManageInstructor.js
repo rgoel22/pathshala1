@@ -31,7 +31,7 @@ const MyTable = () => {
   };
 
   // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.
-  const headers = ['First Name', 'Last Name', 'Email ID', 'Phone Number'];
+  const headers = [["firstName", 'First Name'], ["lastName", 'Last Name'], ["emailId", 'Email ID'], ["phoneNumber", 'Phone Number']];
 
   return (
     <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
@@ -43,34 +43,27 @@ const MyTable = () => {
       <Table stickyHeader>
         <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
           <TableRow>
-            {headers.map((header) => (
-              <TableCell key={header} sx={{ fontWeight: 'bold' }}>{header}</TableCell>
+            {headers.map((header, index) => (
+              <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
             ))}
             <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-        {data.map((row) => (
-  <TableRow key={row.id}>
-    {headers.map((header) => {
-      const headerKey = header.replace(/\s+/g, '').toLowerCase();
-      console.log(`Row: ${JSON.stringify(row)}`);
-      console.log(`Header: ${header}, Header Key: ${headerKey}, Value: ${row[headerKey]}`);
-      
-      return (
-        <TableCell key={header}>{row[headerKey]}</TableCell>
-      );
-    })}
-    <TableCell>
-      <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row.userId)}>
-        <EditIcon />
-      </IconButton>
-      <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row.userId)}>
-        <DeleteIcon />
-      </IconButton>
-    </TableCell>
-  </TableRow>
-))}
+          {data.map((row) => (
+            <TableRow key={row.id}>
+              {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
+
+              <TableCell>
+                <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row.userId)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row.userId)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
 
         </TableBody>
       </Table>
