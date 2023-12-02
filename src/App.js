@@ -6,6 +6,7 @@ import { UserContext } from "./context/user/user.context";
 import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
 import SignIn from "./components/Signin";
+import AdminPage from './components/AdminPage';
 import { Routes, Route } from "react-router-dom"
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
@@ -106,6 +107,7 @@ function App() {
               <Route path="/" element={<SignIn />} />
               <Route path="/pathshala" element={<PathShala />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/admin" element={<AdminPage />} />
             </Routes>
           </CoursesProvider>
         </UserProvider>
