@@ -6,6 +6,7 @@ import { UserContext } from "./context/user/user.context";
 import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
 import SignIn from "./components/Signin";
+import { Routes, Route } from "react-router-dom"
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -98,8 +99,10 @@ function App() {
     <RouterProvider>
       <UserProvider>
         <CoursesProvider>
-          <PathShala />
-          <SignIn />
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/pathshala" element={<PathShala />} />
+          </Routes>
         </CoursesProvider>
       </UserProvider>
     </RouterProvider>
