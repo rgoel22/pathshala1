@@ -7,6 +7,8 @@ import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
 import SignIn from "./components/Signin";
 import { Routes, Route } from "react-router-dom"
+import { LoadingProvider } from "./context/loadingContext";
+import SignUp from "./components/SignUp";
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -96,16 +98,20 @@ function PathShala() {
 
 function App() {
   return (
-    <RouterProvider>
-      <UserProvider>
-        <CoursesProvider>
-          <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/pathshala" element={<PathShala />} />
-          </Routes>
-        </CoursesProvider>
-      </UserProvider>
-    </RouterProvider>
+    <LoadingProvider>
+      <RouterProvider>
+        <UserProvider>
+          <CoursesProvider>
+            <Routes>
+              <Route path="/" element={<SignIn />} />
+              <Route path="/pathshala" element={<PathShala />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+          </CoursesProvider>
+        </UserProvider>
+      </RouterProvider>
+
+    </LoadingProvider>
   );
 }
 
