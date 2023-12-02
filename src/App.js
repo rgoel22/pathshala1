@@ -7,6 +7,7 @@ import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
 import SignIn from "./components/Signin";
 import AdminPage from './components/AdminPage';
+import ManageInstructor from './components/ManageInstructor';
 import { Routes, Route } from "react-router-dom"
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
@@ -103,11 +104,13 @@ function App() {
       <RouterProvider>
         <UserProvider>
           <CoursesProvider>
+            <div>Hello world!!</div>
             <Routes>
               <Route path="/" element={<SignIn />} />
               <Route path="/pathshala" element={<PathShala />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/manageInstructor" element={<ManageInstructor />} />
             </Routes>
           </CoursesProvider>
         </UserProvider>
