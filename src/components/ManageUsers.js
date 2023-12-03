@@ -33,36 +33,35 @@ const MyTable = () => {
 
   return (
     <>
-    <Navbar />
-    <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+      <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Users
-    </Typography>
-    <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
-      <Table stickyHeader>
-        <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-          <TableRow>
-            {headers.map((header, index) => (
-              <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
-            ))}
-            <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
-              {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
-
-              <TableCell>
-                <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row.userId)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+      </Typography>
+      <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
+        <Table stickyHeader>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow>
+              {headers.map((header, index) => (
+                <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
+              ))}
+              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
             </TableRow>
-          ))}
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
 
-        </TableBody>
-      </Table>
-    </TableContainer>
+                <TableCell>
+                  <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row.userId)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

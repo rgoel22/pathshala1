@@ -106,7 +106,6 @@ const InstrunctorTable = () => {
 
   return (
     <>
-      <Navbar />
       <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Instructors
       </Typography>

@@ -13,6 +13,10 @@ import { Routes, Route, useParams, Navigate, useNavigate } from "react-router-do
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
 import AddCourse from "./components/ManageCourse";
+import Navbar from "./components/Navbar";
+import { AlertProvider } from "./context/alertContext";
+import AlertPopup from "./components/AlertPopup";
+
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -122,19 +126,22 @@ function App() {
       <RouterProvider>
         <UserProvider>
           <CoursesProvider>
-            <Routes>
-              <Route path="/" element={<SignIn />} />
-              <Route path="/pathshala" element={<PathShala />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/instructor/:id" element={<InstructorPage />} />
-              <Route path="/admin/manageUsers" element={<ManageUsers />} />
-              <Route
+            <AlertProvider>
+              <AlertPopup />
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<SignIn />} />
+                <Route path="/pathshala" element={<PathShala />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/manageUsers" element={<ManageUsers />} />
+                <Route
                 path="/admin/manageInstructor"
                 element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
               />
-              <Route path="/admin/courses" element={<AddCourse />} />
-            </Routes>
+                <Route path="/admin/courses" element={<AddCourse />} />
+              </Routes>
+            </AlertProvider>
           </CoursesProvider>
         </UserProvider>
       </RouterProvider>

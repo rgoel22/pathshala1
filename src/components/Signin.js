@@ -1,35 +1,36 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useLoading } from "../context/loadingContext";
-import Loading from "./Loading";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useLoading } from '../context/loadingContext';
+import Loading from './Loading';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import useAlert from '../hooks/useAlert';
 import { USER_TYPES } from "../constants";
 import { UserContext } from "../context/user/user.context";
-
 const defaultTheme = createTheme();
 
 export default function SignIn(props) {
-  const { loading, setLoading } = useLoading();
-  const navigate = useNavigate(); // Get the navigate function
-  const { changeUser } = React.useContext(UserContext);
+    const { loading, setLoading } = useLoading();
+    const { setAlert } = useAlert();
+    const navigate = useNavigate(); // Get the navigate function
+    const { changeUser } = React.useContext(UserContext);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = {
-      userId: data.get("userid"),
-      password: data.get("password"),
-    };
-
-    setLoading(true);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const body = {
+            userId: data.get('userid'),
+            password: data.get('password'),
+        };
+        
+        setLoading(true);
 
     try {
       const response = await fetch(
@@ -43,28 +44,29 @@ export default function SignIn(props) {
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.userType === USER_TYPES.ADMIN) {
-          changeUser(data);
-          navigate("/admin");
-        } else if (data.userType === USER_TYPES.INSTRUCTOR) {
-          changeUser(data);
-          navigate(`/instructor/${data.userId}`);
-        } else if (data.userType === USER_TYPES.STUDENT) {
-          changeUser(data);
+            if (response.ok) {
+              setAlert('Login success!', 'success')
+              const data = await response.json();
+              if (data.userType === USER_TYPES.ADMIN) {
+                changeUser(data);
+                navigate("/admin");
+              } else if (data.userType === USER_TYPES.INSTRUCTOR) {
+                changeUser(data);
+                navigate(`/instructor/${data.userId}`);
+              } else if (data.userType === USER_TYPES.STUDENT) {
+                changeUser(data);
+              }
+            } else {
+                // Handle unsuccessful login
+                setAlert('Invalid Credentials', 'error')
+                console.error('Login failed');
+            }
+        } catch (error) {
+            console.error('An error occurred during login:', error);
+        } finally {
+            setLoading(false);
         }
-        // If login is successful, navigate to the admin page
-      } else {
-        // Handle unsuccessful login
-        console.error("Login failed");
-      }
-    } catch (error) {
-      console.error("An error occurred during login:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   return (
     <ThemeProvider theme={defaultTheme}>

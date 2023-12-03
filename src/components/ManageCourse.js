@@ -97,9 +97,9 @@ const CourseTable = () => {
     // Assuming data is an array of objects with fields like 'name', 'courseCode' etc.
     let userId;
     const headers = [["name", 'Name'], ["courseCode", 'Course Code'], ["description", 'Description'], ["syllabus", 'Syllabus'],
-        ['instructorName', 'Instructor Name']];
+    ['instructorName', 'Instructor Name']];
 
-    return(
+    return (
         <>
         <Navbar />
         <Typography variant="h4" align="center" sx={{ margin: '20px' }}>

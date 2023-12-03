@@ -1,13 +1,14 @@
 // AdminPage.js
-
 import React, { useCallback, useContext } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { UserContext, useUser } from "../context/user/user.context";
+import { useUser } from "../context/user/user.context";
 import { Link } from "react-router-dom";
+import Container from "@mui/material/Container";
+import { UserContext, useUser } from "../context/user/user.context";
 
 const AdminPage = () => {
   const { user, logout } = useUser();
@@ -21,6 +22,12 @@ const AdminPage = () => {
 
   return (
     <div className="admin-page">
+      <Container
+        disableGutters
+        maxWidth="sm"
+        component="main"
+        sx={{ pt: 8, pb: 6 }}
+      >
       <Typography
         variant="h4"
         align="center"
@@ -28,7 +35,8 @@ const AdminPage = () => {
       >
         Admin's Dashboard
       </Typography>
-      <div className="user-info">
+      </Container>
+      {/*<div className="user-info">
         {user && (
           <>
             <Typography
@@ -43,9 +51,10 @@ const AdminPage = () => {
             </Button>
           </>
         )}
-      </div>
-
+      </div>{" "}
+      */}
       {/* Existing card components remain unchanged */}
+      <div className='admin-card-container'></div>
       <CardContainer1
         to="/admin/manageUsers"
         title="Manage Users"
@@ -55,7 +64,6 @@ const AdminPage = () => {
       >
         <ImgMediaCard />
       </CardContainer1>
-
       <CardContainer2
         to="/admin/manageInstructor" // Specify the target URL
         title="Manage Instructors"
@@ -65,7 +73,6 @@ const AdminPage = () => {
       >
         <ImgMediaCard />
       </CardContainer2>
-
       <CardContainer
         to="/admin/courses"
         title="Manage Courses"
@@ -75,6 +82,7 @@ const AdminPage = () => {
       >
         <ImgMediaCard />
       </CardContainer>
+      </div>
     </div>
   );
 };
