@@ -11,22 +11,23 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useLoading } from '../context/loadingContext';
 import Loading from './Loading';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import useAlert from '../hooks/useAlert';
 
 const defaultTheme = createTheme();
 
 export default function SignIn(props) {
     const { loading, setLoading } = useLoading();
+    const { setAlert } = useAlert();
     const navigate = useNavigate(); // Get the navigate function
 
     const handleSubmit = async (event) => {
+        setLoading(true);
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
             userId: data.get('userid'),
             password: data.get('password'),
         };
-        
-        setLoading(true);
 
         try {
             const response = await fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/login', {
@@ -38,9 +39,11 @@ export default function SignIn(props) {
             });
 
             if (response.ok) {
+                setAlert('Login success!', 'success')
                 // If login is successful, navigate to the admin page
                 navigate('/admin');
             } else {
+                setAlert('Invalid Credentials', 'error')
                 // Handle unsuccessful login
                 console.error('Login failed');
             }
@@ -53,7 +56,7 @@ export default function SignIn(props) {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {loading && <Loading />}
+            {/* {loading && <Loading />} */}
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
