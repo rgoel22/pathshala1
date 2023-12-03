@@ -47,6 +47,7 @@ export default function SignIn(props) {
             if (response.ok) {
                 setAlert('Login success!', 'success')
                 const data = await response.json();
+                localStorage.setItem('user', JSON.stringify(data));
                 if (data.userType === USER_TYPES.ADMIN) {
                     changeUser(data);
                     navigate("/admin");
@@ -81,8 +82,7 @@ export default function SignIn(props) {
                         alignItems: "center",
                     }}
                 >
-                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 156 }} variant="square"
-                    />
+                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 156 }} variant="square" />
                     <Typography component="h1" variant="h5">
                         Sign In
                     </Typography>
