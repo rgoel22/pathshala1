@@ -16,7 +16,7 @@ import AddCourse from "./components/ManageCourse";
 import Navbar from "./components/Navbar";
 import { AlertProvider } from "./context/alertContext";
 import AlertPopup from "./components/AlertPopup";
-import Courses from "./components/Courses";
+import InstructorDashboard from "./components/InstructorDashboard";
 import StudentsDashboard from "./components/StudentsDashboard";
 
 
@@ -134,7 +134,7 @@ function App() {
               {location.pathname !== '/' && location.pathname !== '/signup' && <Navbar />}
               <Routes>
                 <Route path="/" element={<SignIn />} />
-                <Route path="/instructor" element={<Courses />} />
+                <Route path="/instructor" element={<InstructorDashboard />} />
                 <Route path="/student" element={<StudentsDashboard />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/admin" element={<AdminPage />} />

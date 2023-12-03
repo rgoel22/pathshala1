@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user/user.context';
 import { Avatar, Box, Card, CardActions, CardContent, Dialog, Grid, IconButton } from '@mui/material';
 
-const Courses = () => {
+const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -73,4 +73,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default InstructorDashboard;
