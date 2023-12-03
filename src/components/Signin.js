@@ -53,9 +53,10 @@ export default function SignIn(props) {
                     navigate("/admin");
                 } else if (data.userType === USER_TYPES.INSTRUCTOR) {
                     changeUser(data);
-                    navigate(`/instructor/${data.userId}`);
+                    navigate(`/instructor`);
                 } else if (data.userType === USER_TYPES.STUDENT) {
                     changeUser(data);
+                    navigate(`/student`);
                 }
             } else {
                 // Handle unsuccessful login

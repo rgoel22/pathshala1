@@ -155,7 +155,7 @@ const InstrunctorTable = () => {
       </TableContainer>
 
       <Dialog open={openModal} onClose={handleModalClose}>
-        <DialogTitle>{modalAction === 'add' ? 'Add Data' : 'Edit Data'}</DialogTitle>
+        <DialogTitle>{modalAction === 'add' ? 'Add Instructor' : 'Edit Instructor'}</DialogTitle>
         <DialogContent>
           {/* Add your input fields here */}
           <TextField

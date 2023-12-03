@@ -42,7 +42,7 @@ const MyTable = () => {
     <>
       {loading && <Loading />}
       <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
-        Manage Users
+        Manage Students
       </Typography>
       <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
         <Table stickyHeader>

@@ -56,7 +56,7 @@ const AdminPage = () => {
       <div className='admin-card-container'>
       <CardContainer1
         to="/admin/manageUsers"
-        title="Manage Users"
+        title="Manage Students"
         titleStyle={{ fontSize: "24px", fontWeight: "bold", color: "#4CAF50" }}
         description="Manage users in the system"
         descriptionStyle={{ fontSize: "16px", color: "#555" }}

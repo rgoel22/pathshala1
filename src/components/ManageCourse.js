@@ -113,7 +113,7 @@ const CourseTable = () => {
       ...modalData,
       "id": selectedRowKey
     };
-    let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/course';
+    let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses';
     fetch(url, {
       method: "POST", headers: {
         "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const CourseTable = () => {
         </Table>
       </TableContainer>
       <Dialog open={openModal} onClose={handleModalClose}>
-        <DialogTitle>{modalAction === 'add' ? 'Add Data' : 'Edit Data'}</DialogTitle>
+        <DialogTitle>{modalAction === 'add' ? 'Add Course' : 'Edit Course'}</DialogTitle>
         <DialogContent>
           {/* Add your input fields here */}
           <TextField
