@@ -10,119 +10,166 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Navbar from './Navbar';
 import Typography from '@mui/material/Typography';
+import Loading from './Loading';
+import { useLoading } from '../context/loadingContext';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 const CourseTable = () => {
-    const [data, setData] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
-    const [modalData, setModalData] = useState({});
-    const [modalAction, setModalAction] = useState('add');
-    const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const [data, setData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalData, setModalData] = useState({});
+  const [modalAction, setModalAction] = useState('add');
+  const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const { loading, setLoading } = useLoading();
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const autocompleteLoading = open && options.length === 0;
+  const [autocompleteData, setAutocompleteData] = useState([]);
 
+
+
+  useEffect(() => {
+    let active = true;
+
+    if (!autocompleteLoading) {
+      return undefined;
+    }
+
+    (async () => {
+
+      if (active) {
+        setOptions(autocompleteData);
+        // console.log(autocompleteData)
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [autocompleteLoading]);
+
+  useEffect(() => {
+    setLoading(true);
+    // Fetch data from the API when the component mounts
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses')
+      .then(response => response.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error)
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor')
-    .then(response => response.json()).then(result => {
+      .then(response => response.json()).then(result => {
         console.log(result);
-    })
-    .catch(error => console.error('Error fetching data:', error));
-
-    useEffect(() => {
-        // Fetch data from the API when the component mounts
-        fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses')
-            .then(response => response.json())
-            .then(data => setData(data))
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
-
-    const handleEditClick = useCallback((row) => {
-        setModalData(row);
-        setModalAction('edit');
-        setOpenModal(true);
-        setSelectedRowKey(row.id);
-      }, []);
-    
-      const handleAddClick = () => {
-        setModalData({});
-        setModalAction('add');
-        setOpenModal(true);
-      };
-    
-      const handleDeleteClick = (id) => {
-        console.log(`Delete button clicked for id ${id}`);
-      };
-    
-      const handleModalClose = () => {
-        setOpenModal(false);
-      };
-
-      const handleSaveData = () => {
-        // Handle saving data (add/edit) here
-        // You may want to send a request to your API to save the changes
-        let newModalData = { ...modalData,
-          "id": selectedRowKey };
-        let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/course';
-        fetch(url, {
-          method: "POST", headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newModalData)
-        }).then((res) => console.log(res)).catch((err) => console.log(err))
-        handleModalClose();
-      };
+        setAutocompleteData(result);
+        setLoading(false);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
 
-    // Assuming data is an array of objects with fields like 'name', 'courseCode' etc.
-    let userId;
-    const headers = [["name", 'Name'], ["courseCode", 'Course Code'], ["description", 'Description'], ["syllabus", 'Syllabus'],
-    ['instructorName', 'Instructor Name']];
+  const handleEditClick = useCallback((row) => {
+    // console.log(row, 'row')
+    setModalData(row);
+    setModalAction('edit');
+    setOpenModal(true);
+    setSelectedRowKey(row.id);
+  }, []);
 
-    return (
-        <>
-        <Navbar />
-        <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+  const handleAddClick = () => {
+    setModalData({});
+    setModalAction('add');
+    setOpenModal(true);
+  };
+
+  const handleDeleteClick = (id) => {
+    console.log(`Delete button clicked for id ${id}`);
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleSaveData = () => {
+    // Handle saving data (add/edit) here
+    // You may want to send a request to your API to save the changes
+    let newModalData = {
+      ...modalData,
+      "id": selectedRowKey
+    };
+    let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/course';
+    fetch(url, {
+      method: "POST", headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newModalData)
+    }).then((res) => console.log(res)).catch((err) => console.log(err))
+    handleModalClose();
+  };
+
+
+  // Assuming data is an array of objects with fields like 'name', 'courseCode' etc.
+  let userId;
+  const headers = [["name", 'Name'], ["courseCode", 'Course Code'], ["description", 'Description'], ["syllabus", 'Syllabus'],
+  ['instructorName', 'Instructor Name']];
+
+  return (
+    <>
+      {loading && <Loading />}
+      <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Courses
-        </Typography>
-        <TableContainer component={Paper} sx={{ maxWidth: '1000px', margin: 'auto', marginTop: '20px' }}>
-            <div style={{ textAlign: 'right', margin: '10px' }}>
-                <IconButton color="primary" aria-label="add" onClick={handleAddClick}>
-                    <AddIcon />
-                </IconButton>
-            </div>
-            <Table stickyHeader>
-                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-                    <TableRow>
-                        {headers.map((header, index) => (
-                            <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
-                        ))}
-                        <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row) => (
-                        <TableRow key={row.id}>
-                            {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
+      </Typography>
+      <TableContainer component={Paper} sx={{ maxWidth: '1000px', margin: 'auto', marginTop: '20px' }}>
+        <div style={{ textAlign: 'right', margin: '10px' }}>
+          <IconButton color="primary" aria-label="add" onClick={handleAddClick}>
+            <AddIcon />
+          </IconButton>
+        </div>
+        <Table stickyHeader>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow>
+              {headers.map((header, index) => (
+                <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
+              ))}
+              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
 
-                            <TableCell>
-                                <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                <TableCell>
+                  <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
 
-                </TableBody>
-            </Table>
-        </TableContainer>
-        <Dialog open={openModal} onClose={handleModalClose}>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Dialog open={openModal} onClose={handleModalClose}>
         <DialogTitle>{modalAction === 'add' ? 'Add Data' : 'Edit Data'}</DialogTitle>
         <DialogContent>
           {/* Add your input fields here */}
@@ -158,6 +205,40 @@ const CourseTable = () => {
             multiline
             rows={5}
           />
+          <Autocomplete
+            id="instructor"
+            sx={{ width: 300 }}
+            open={open}
+            onOpen={() => {
+              setOpen(true);
+            }}
+            onClose={() => {
+              setOpen(false);
+            }}
+            // onChange={(event, value) => console.log(value)}
+
+            // isOptionEqualToValue={(option, value) => { console.log(modalData, option, value, 'dsdaf') }}
+            getOptionLabel={(option) => { return option.firstName + " " + option.lastName }}
+            options={options}
+            loading={autocompleteLoading}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Instructor"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {autocompleteLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+              />
+            )}
+          />
+          {modalData.instructorId}
+          {modalData.name}
           {/* Add other fields as needed */}
         </DialogContent>
         <div style={{ padding: '10px', textAlign: 'right' }}>
@@ -167,7 +248,7 @@ const CourseTable = () => {
           </Button>
         </div>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 export default CourseTable;

@@ -74,8 +74,8 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    </Avatar>
+                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 156 }} variant="square"
+                    />
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>

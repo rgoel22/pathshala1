@@ -15,8 +15,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Navbar from './Navbar';
 import Typography from '@mui/material/Typography';
+import Loading from './Loading';
+import { useLoading } from '../context/loadingContext';
 
 const InstrunctorTable = () => {
   const [data, setData] = useState([]);
@@ -24,13 +25,21 @@ const InstrunctorTable = () => {
   const [modalData, setModalData] = useState({});
   const [modalAction, setModalAction] = useState('add');
   const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const { loading, setLoading } = useLoading();
 
   useEffect(() => {
+    setLoading(true);
     // Fetch data from the API when the component mounts
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor')
       .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error)
+        setLoading(false);
+      });
   }, []);
 
   const handleEditClick = (row) => {
@@ -106,6 +115,7 @@ const InstrunctorTable = () => {
 
   return (
     <>
+      {loading && <Loading />}
       <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Instructors
       </Typography>

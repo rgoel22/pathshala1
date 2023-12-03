@@ -16,6 +16,7 @@ import AddCourse from "./components/ManageCourse";
 import Navbar from "./components/Navbar";
 import { AlertProvider } from "./context/alertContext";
 import AlertPopup from "./components/AlertPopup";
+import Courses from "./components/Courses";
 
 
 function CourseForm(props) {
@@ -111,8 +112,8 @@ function InstructorPage() {
 }
 
 function PrivateRoute(props) {
-  const {user} = useContext(UserContext);
-  
+  const { user } = useContext(UserContext);
+
   if (user) {
     return <>{props.children}</>
   } else {
@@ -131,14 +132,14 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<SignIn />} />
-                <Route path="/pathshala" element={<PathShala />} />
+                <Route path="/instructor" element={<Courses />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/admin/manageUsers" element={<ManageUsers />} />
                 <Route
-                path="/admin/manageInstructor"
-                element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
-              />
+                  path="/admin/manageInstructor"
+                  element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
+                />
                 <Route path="/admin/courses" element={<AddCourse />} />
               </Routes>
             </AlertProvider>

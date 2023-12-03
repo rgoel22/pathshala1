@@ -7,21 +7,28 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Navbar from './Navbar';
 import Typography from '@mui/material/Typography';
+import Loading from './Loading';
+import { useLoading } from '../context/loadingContext';
 
 const MyTable = () => {
   const [data, setData] = useState([]);
+  const { loading, setLoading } = useLoading();
 
   useEffect(() => {
+    setLoading(true);
     // Fetch data from the API when the component mounts
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getStudent')
       .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error)
+        setLoading(false);
+      });
   }, []);
 
   const handleDeleteClick = (id) => {
@@ -33,6 +40,7 @@ const MyTable = () => {
 
   return (
     <>
+      {loading && <Loading />}
       <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Users
       </Typography>

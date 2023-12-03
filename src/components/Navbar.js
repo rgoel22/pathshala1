@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user/user.context';
 import { Avatar, IconButton } from '@mui/material';
-import {UserContext} from "./../context/user/user.context"
+import { UserContext } from "./../context/user/user.context"
 
 const Navbar = () => {
   const { logout } = useUser();
@@ -23,9 +23,9 @@ const Navbar = () => {
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <IconButton sx={{ p: 0 }}>
-            <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} />
+            <Avatar alt='Pathshala' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 56 }} variant="square"
+            />
           </IconButton>
-          My Dashboard
         </Typography>
         <Button component={Link} to="/admin" color="inherit">
           Admin Home
