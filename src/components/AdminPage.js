@@ -1,31 +1,41 @@
 // AdminPage.js
 
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { useUser } from '../context/user/user.context';
-import { Link } from 'react-router-dom'; 
+import React, { useCallback, useContext } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { UserContext, useUser } from "../context/user/user.context";
+import { Link } from "react-router-dom";
 
 const AdminPage = () => {
   const { user, logout } = useUser();
+  const { changeUser } = useContext(UserContext);
 
-  const handleLogout = () => {
-    logout();
-    console.log('Logout clicked');
-  };
+  const handleLogout = useCallback(() => {
+    // logout();
+    changeUser(null);
+    console.log("Logout clicked");
+  }, []);
 
   return (
     <div className="admin-page">
-      <Typography variant="h4" align="center" sx={{ margin: '20px 0', marginTop: '50px' }}>
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{ margin: "20px 0", marginTop: "50px" }}
+      >
         Admin's Dashboard
       </Typography>
       <div className="user-info">
         {user && (
           <>
-            <Typography variant="body1" color="text.primary" style={{ marginRight: '16px' }}>
+            <Typography
+              variant="body1"
+              color="text.primary"
+              style={{ marginRight: "16px" }}
+            >
               Welcome, {user.username}
             </Typography>
             <Button variant="outlined" color="primary" onClick={handleLogout}>
@@ -39,9 +49,9 @@ const AdminPage = () => {
       <CardContainer1
         to="/admin/manageUsers"
         title="Manage Users"
-        titleStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#4CAF50' }}
+        titleStyle={{ fontSize: "24px", fontWeight: "bold", color: "#4CAF50" }}
         description="Manage users in the system"
-        descriptionStyle={{ fontSize: '16px', color: '#555' }}
+        descriptionStyle={{ fontSize: "16px", color: "#555" }}
       >
         <ImgMediaCard />
       </CardContainer1>
@@ -49,9 +59,9 @@ const AdminPage = () => {
       <CardContainer2
         to="/admin/manageInstructor" // Specify the target URL
         title="Manage Instructors"
-        titleStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#2196F3' }}
+        titleStyle={{ fontSize: "24px", fontWeight: "bold", color: "#2196F3" }}
         description="Manage instructors in the system"
-        descriptionStyle={{ fontSize: '16px', color: '#555' }}
+        descriptionStyle={{ fontSize: "16px", color: "#555" }}
       >
         <ImgMediaCard />
       </CardContainer2>
@@ -59,9 +69,9 @@ const AdminPage = () => {
       <CardContainer
         to="/admin/courses"
         title="Manage Courses"
-        titleStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#FF5722' }}
+        titleStyle={{ fontSize: "24px", fontWeight: "bold", color: "#FF5722" }}
         description="Manage courses in the system"
-        descriptionStyle={{ fontSize: '16px', color: '#555' }}
+        descriptionStyle={{ fontSize: "16px", color: "#555" }}
       >
         <ImgMediaCard />
       </CardContainer>
@@ -69,59 +79,116 @@ const AdminPage = () => {
   );
 };
 
-const CardContainer2 = ({ title, titleStyle, description, descriptionStyle, cardText, children }) => {
+const CardContainer2 = ({
+  title,
+  titleStyle,
+  description,
+  descriptionStyle,
+  cardText,
+  children,
+}) => {
   return (
-    <Link to={"/admin/manageInstructor"} style={{ textDecoration: 'none', color: 'inherit' }}>
-    <div className="card-container">
-      <Typography gutterBottom variant="h4" component="div" style={titleStyle}>
-        {title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" style={descriptionStyle}>
-        {description}
-      </Typography>
-      {children}
-      <Typography variant="body2" color="text.secondary">
-        {cardText}
-      </Typography>
-    </div>
-  </Link>
-  );
-};
-
-const CardContainer = ({ title, titleStyle, description, descriptionStyle, cardText, children }) => {
-  return (
-    <Link to={"/admin/courses"} style={{ textDecoration: 'none', color: 'inherit' }}>
-    <div className="card-container">
-      <Typography gutterBottom variant="h4" component="div" style={titleStyle}>
-        {title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" style={descriptionStyle}>
-        {description}
-      </Typography>
-      {children}
-      <Typography variant="body2" color="text.secondary">
-        {cardText}
-      </Typography>
-    </div>
+    <Link
+      to={"/admin/manageInstructor"}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      <div className="card-container">
+        <Typography
+          gutterBottom
+          variant="h4"
+          component="div"
+          style={titleStyle}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={descriptionStyle}
+        >
+          {description}
+        </Typography>
+        {children}
+        <Typography variant="body2" color="text.secondary">
+          {cardText}
+        </Typography>
+      </div>
     </Link>
   );
 };
 
-const CardContainer1 = ({ title, titleStyle, description, descriptionStyle, cardText, children }) => {
+const CardContainer = ({
+  title,
+  titleStyle,
+  description,
+  descriptionStyle,
+  cardText,
+  children,
+}) => {
   return (
-    <Link to={"/admin/manageUsers"} style={{ textDecoration: 'none', color: 'inherit' }}>
-    <div className="card-container">
-      <Typography gutterBottom variant="h4" component="div" style={titleStyle}>
-        {title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" style={descriptionStyle}>
-        {description}
-      </Typography>
-      {children}
-      <Typography variant="body2" color="text.secondary">
-        {cardText}
-      </Typography>
-    </div>
+    <Link
+      to={"/admin/courses"}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      <div className="card-container">
+        <Typography
+          gutterBottom
+          variant="h4"
+          component="div"
+          style={titleStyle}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={descriptionStyle}
+        >
+          {description}
+        </Typography>
+        {children}
+        <Typography variant="body2" color="text.secondary">
+          {cardText}
+        </Typography>
+      </div>
+    </Link>
+  );
+};
+
+const CardContainer1 = ({
+  title,
+  titleStyle,
+  description,
+  descriptionStyle,
+  cardText,
+  children,
+}) => {
+  return (
+    <Link
+      to={"/admin/manageUsers"}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      <div className="card-container">
+        <Typography
+          gutterBottom
+          variant="h4"
+          component="div"
+          style={titleStyle}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={descriptionStyle}
+        >
+          {description}
+        </Typography>
+        {children}
+        <Typography variant="body2" color="text.secondary">
+          {cardText}
+        </Typography>
+      </div>
     </Link>
   );
 };
@@ -132,9 +199,9 @@ const ImgMediaCard = () => {
       <CardMedia
         component="img"
         alt="green iguana"
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
         // Use the correct relative path from the public URL
-        image={process.env.PUBLIC_URL + '/user-manage.jpg'}
+        image={process.env.PUBLIC_URL + "/user-manage.jpg"}
       />
       <CardContent>
         {/* Text specific to each card */}

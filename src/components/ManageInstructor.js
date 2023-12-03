@@ -76,12 +76,26 @@ const InstrunctorTable = () => {
       url = url + "updateUser";
     }
 
+    // setData(prev => {
+    //   return prev.map(d => {
+    //     if (newModalData.id === d.id) return newModalData;
+    //     else return d;
+    //   })
+    // });
+
     fetch(url, {
       method: "POST", headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newModalData)
-    }).then((res) => console.log(res)).catch((err) => console.log(err))
+    }).then((res) => res.json()).then(newRow => {
+      setData(prev => {
+        return prev.map(d => {
+          if (newRow.id === d.id) return newModalData;
+          else return d;
+        })
+      });
+    }).catch((err) => console.log(err))
     handleModalClose();
   };
 

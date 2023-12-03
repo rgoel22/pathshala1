@@ -6,14 +6,13 @@ import { UserContext } from "./context/user/user.context";
 import { CoursesContext } from "./context/courses/courses.context";
 import { USER_TYPES } from "./constants";
 import SignIn from "./components/Signin";
-import AdminPage from './components/AdminPage';
-import ManageInstructor from './components/ManageInstructor';
-import ManageUsers from './components/ManageUsers';
-import { Routes, Route } from "react-router-dom"
+import AdminPage from "./components/AdminPage";
+import ManageInstructor from "./components/ManageInstructor";
+import ManageUsers from "./components/ManageUsers";
+import { Routes, Route, useParams, Navigate, useNavigate } from "react-router-dom";
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
 import AddCourse from "./components/ManageCourse";
-
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -101,6 +100,22 @@ function PathShala() {
   return <div>"404 Not Found"</div>;
 }
 
+function InstructorPage() {
+  const params = useParams();
+  console.log(params);
+  return <div>Instructor Page</div>;
+}
+
+function PrivateRoute(props) {
+  const {user} = useContext(UserContext);
+  
+  if (user) {
+    return <>{props.children}</>
+  } else {
+    return <Navigate to="/" replace={true} />
+  }
+}
+
 function App() {
   return (
     <LoadingProvider>
@@ -112,14 +127,17 @@ function App() {
               <Route path="/pathshala" element={<PathShala />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/manageUsers" element={<ManageUsers/>} /> 
-              <Route path="/admin/manageInstructor" element={<ManageInstructor />} />
+              <Route path="/instructor/:id" element={<InstructorPage />} />
+              <Route path="/admin/manageUsers" element={<ManageUsers />} />
+              <Route
+                path="/admin/manageInstructor"
+                element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
+              />
               <Route path="/admin/courses" element={<AddCourse />} />
             </Routes>
           </CoursesProvider>
         </UserProvider>
       </RouterProvider>
-
     </LoadingProvider>
   );
 }

@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user/user.context';
+import {UserContext} from "./../context/user/user.context"
 
 const Navbar = () => {
   const { logout } = useUser();
   const navigate = useNavigate(); // Use the useNavigate hook for navigation
+  const { changeUser } = useContext(UserContext);
 
   const handleLogout = () => {
+    changeUser(null);
     navigate('/'); // Use the navigate function to redirect to the SignIn page
   };
 
