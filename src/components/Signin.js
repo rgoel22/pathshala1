@@ -56,7 +56,7 @@ export default function SignIn(props) {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {/* {loading && <Loading />} */}
+            {loading && <Loading />}
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
