@@ -5,7 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useUser } from "../context/user/user.context";
 import { Link } from "react-router-dom";
 import Container from "@mui/material/Container";
 import { UserContext, useUser } from "../context/user/user.context";
@@ -54,7 +53,7 @@ const AdminPage = () => {
       </div>{" "}
       */}
       {/* Existing card components remain unchanged */}
-      <div className='admin-card-container'></div>
+      <div className='admin-card-container'>
       <CardContainer1
         to="/admin/manageUsers"
         title="Manage Users"
