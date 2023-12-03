@@ -17,6 +17,7 @@ import Navbar from "./components/Navbar";
 import { AlertProvider } from "./context/alertContext";
 import AlertPopup from "./components/AlertPopup";
 import Courses from "./components/Courses";
+import StudentsDashboard from "./components/StudentsDashboard";
 
 
 function CourseForm(props) {
@@ -133,6 +134,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<SignIn />} />
                 <Route path="/instructor" element={<Courses />} />
+                <Route path="/student" element={<StudentsDashboard />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/admin/manageUsers" element={<ManageUsers />} />
