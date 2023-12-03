@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Navbar from './Navbar';
+import Typography from '@mui/material/Typography';
 
 const MyTable = () => {
   const [data, setData] = useState([]);
@@ -30,12 +32,12 @@ const MyTable = () => {
   const headers = [["firstName", 'First Name'], ["lastName", 'Last Name'], ["emailId", 'Email ID'], ["phoneNumber", 'Phone Number']];
 
   return (
+    <>
+    <Navbar />
+    <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+        Manage Users
+    </Typography>
     <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
-      <div style={{ textAlign: 'right', margin: '10px' }}>
-        <IconButton color="primary" aria-label="add" onClick={() => console.log('Add button clicked')}>
-          <AddIcon />
-        </IconButton>
-      </div>
       <Table stickyHeader>
         <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
           <TableRow>
@@ -61,6 +63,7 @@ const MyTable = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 };
 

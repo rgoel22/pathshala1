@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Navbar from './Navbar';
+import Typography from '@mui/material/Typography';
 
 const CourseTable = () => {
     const [data, setData] = useState([]);
@@ -36,6 +38,11 @@ const CourseTable = () => {
         ['instructorName', 'Instructor Name']];
 
     return(
+        <>
+        <Navbar />
+        <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+        Manage Courses
+        </Typography>
         <TableContainer component={Paper} sx={{ maxWidth: '1000px', margin: 'auto', marginTop: '20px' }}>
             <div style={{ textAlign: 'right', margin: '10px' }}>
                 <IconButton color="primary" aria-label="add" onClick={() => console.log('Add button clicked')}>
@@ -70,6 +77,7 @@ const CourseTable = () => {
                 </TableBody>
             </Table>
         </TableContainer>
+        </>
     );
 };
 export default CourseTable;
