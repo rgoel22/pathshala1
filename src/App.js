@@ -11,6 +11,8 @@ import ManageInstructor from './components/ManageInstructor';
 import { Routes, Route } from "react-router-dom"
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
+import AddCourse from "./components/ManageCourse";
+
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -111,6 +113,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/manageInstructor" element={<ManageInstructor />} />
+              <Route path="/admin/courses" element={<AddCourse />} />
             </Routes>
           </CoursesProvider>
         </UserProvider>
