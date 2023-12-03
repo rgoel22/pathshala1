@@ -64,26 +64,9 @@ const CourseTable = () => {
       const handleSaveData = () => {
         // Handle saving data (add/edit) here
         // You may want to send a request to your API to save the changes
-        let newModalData = { ...modalData };
-        let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/';
-        if (modalAction === 'add') {
-          newModalData = {
-            ...newModalData,
-            rePassword: "Welcome@123",
-            password: "Welcome@123",
-            userId: modalData.emailId,
-            userType: "INSTRUCTOR"
-          }
-          url = url + "signUp";
-        } else {
-          newModalData = {
-            ...newModalData,
-            "id": selectedRowKey
-          }
-          url = url + "updateUser";
-        }
-
-
+        let newModalData = { ...modalData,
+          "id": selectedRowKey };
+        let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/course';
         fetch(url, {
           method: "POST", headers: {
             "Content-Type": "application/json",
