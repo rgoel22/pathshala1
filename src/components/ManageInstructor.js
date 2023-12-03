@@ -10,16 +10,13 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-<<<<<<< Updated upstream
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-=======
 import Navbar from './Navbar';
 import Typography from '@mui/material/Typography';
->>>>>>> Stashed changes
 
 const InstrunctorTable = () => {
   const [data, setData] = useState([]);
@@ -71,9 +68,11 @@ const InstrunctorTable = () => {
         userType: "INSTRUCTOR"
       }
       url = url + "signUp";
-    } else { 
-      newModalData = {...newModalData,
-      "id": selectedRowKey}
+    } else {
+      newModalData = {
+        ...newModalData,
+        "id": selectedRowKey
+      }
       url = url + "updateUser";
     }
 
@@ -93,7 +92,10 @@ const InstrunctorTable = () => {
 
   return (
     <>
-<<<<<<< Updated upstream
+      <Navbar />
+      <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+        Manage Instructors
+      </Typography>
       <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
         <div style={{ textAlign: 'right', margin: '10px' }}>
           <IconButton color="primary" aria-label="add" onClick={handleAddClick}>
@@ -107,40 +109,6 @@ const InstrunctorTable = () => {
                 <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
               ))}
               <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-=======
-    <Navbar />
-    <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
-        Manage Instructors
-    </Typography>
-    <TableContainer component={Paper} sx={{ maxWidth: '800px', margin: 'auto', marginTop: '20px' }}>
-      <div style={{ textAlign: 'right', margin: '10px' }}>
-        <IconButton color="primary" aria-label="add" onClick={() => console.log('Add button clicked')}>
-          <AddIcon />
-        </IconButton>
-      </div>
-      <Table stickyHeader>
-        <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-          <TableRow>
-            {headers.map((header, index) => (
-              <TableCell key={index} sx={{ fontWeight: 'bold' }}>{header[1]}</TableCell>
-            ))}
-            <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
-              {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
-
-              <TableCell>
-                <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row.userId)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row.userId)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
->>>>>>> Stashed changes
             </TableRow>
           </TableHead>
           <TableBody>
@@ -205,14 +173,6 @@ const InstrunctorTable = () => {
         </div>
       </Dialog>
     </>
-
-<<<<<<< Updated upstream
-=======
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </>
->>>>>>> Stashed changes
   );
 };
 
