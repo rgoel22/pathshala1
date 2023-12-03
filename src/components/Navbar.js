@@ -18,7 +18,9 @@ const Navbar = () => {
   const navigate = useNavigate(); // Use the useNavigate hook for navigation
   const { changeUser, user } = useContext(UserContext);
   const handleLogout = () => {
-    changeUser(null);
+    var id = JSON.parse(localStorage.getItem('user')).userDetails.id
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/logout?userId=' + id)
+    .then(changeUser(null))
     navigate('/'); // Use the navigate function to redirect to the SignIn page
   };
   const [anchorEl, setAnchorEl] = useState(null);

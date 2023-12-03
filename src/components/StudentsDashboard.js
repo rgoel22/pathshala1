@@ -22,8 +22,9 @@ const StudentsDashboard = () => {
   };
 
   useEffect(() => {
+    var id = JSON.parse(localStorage.getItem('user')).userDetails.id;
     fetch(
-      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/student?userId=1"
+      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/student?userId=" + id
     )
       .then((res) => res.json())
       .then((data) => {
