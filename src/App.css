@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.grayscale {
+  filter: grayscale(100%);
+}
+
 .course-card {
   display: flex;
   flex-direction: column;

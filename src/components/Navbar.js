@@ -9,9 +9,12 @@ import { Avatar, IconButton } from '@mui/material';
 import { UserContext } from "./../context/user/user.context"
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 const Navbar = () => {
   const { logout } = useUser();
+  const [greyScale, setGreyScale] = useState(false);
   const navigate = useNavigate(); // Use the useNavigate hook for navigation
   const { changeUser, user } = useContext(UserContext);
   const handleLogout = () => {
@@ -27,14 +30,28 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+  const handleGreyScaleChange = (event) => {
+    const body = document.body;
+    body.classList.toggle('grayscale');
+    setGreyScale(!greyScale)
+  };
+
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" color='transparent'>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <IconButton sx={{ p: 0 }}>
             <Avatar alt='Pathshala' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 56 }} variant="square" />
           </IconButton>
         </Typography>
+
+        <FormControlLabel
+          control={
+            <Switch checked={greyScale} onChange={handleGreyScaleChange} name="jason" />
+          }
+          label="Grey Scale"
+        />
         <Button component={Link} to="/admin" color="inherit">
           Admin Home
         </Button>
