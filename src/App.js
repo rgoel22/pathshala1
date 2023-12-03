@@ -9,7 +9,7 @@ import SignIn from "./components/Signin";
 import AdminPage from "./components/AdminPage";
 import ManageInstructor from "./components/ManageInstructor";
 import ManageUsers from "./components/ManageUsers";
-import { Routes, Route, useParams, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, useParams, Navigate, useLocation } from "react-router-dom";
 import { LoadingProvider } from "./context/loadingContext";
 import SignUp from "./components/SignUp";
 import AddCourse from "./components/ManageCourse";
@@ -123,6 +123,7 @@ function PrivateRoute(props) {
 }
 
 function App() {
+  const location = useLocation();
   return (
     <LoadingProvider>
       <RouterProvider>
@@ -130,7 +131,7 @@ function App() {
           <CoursesProvider>
             <AlertProvider>
               <AlertPopup />
-              <Navbar />
+              {location.pathname !== '/' && location.pathname !== '/signup' && <Navbar />}
               <Routes>
                 <Route path="/" element={<SignIn />} />
                 <Route path="/instructor" element={<Courses />} />
