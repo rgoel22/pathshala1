@@ -82,7 +82,7 @@ export default function SignIn(props) {
                         alignItems: "center",
                     }}
                 >
-                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 156, height: 156 }} variant="square" />
+                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 200, height: 200 }} variant="square" />
                     <Typography component="h1" variant="h5">
                         Sign In
                     </Typography>

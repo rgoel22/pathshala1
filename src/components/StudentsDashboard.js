@@ -23,7 +23,7 @@ const StudentsDashboard = () => {
 
   useEffect(() => {
     fetch(
-      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/instructor?userId=1"
+      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/student?userId=1"
     )
       .then((res) => res.json())
       .then((data) => {
@@ -51,7 +51,7 @@ const StudentsDashboard = () => {
                     <Typography variant="h5" component="div">
                       {course.name}
                     </Typography>
-                    <Avatar alt='instructor' src={require("../assets/images/instructor.jpeg")} sx={{ width: "auto", height: "auto" }} variant="square"
+                    <Avatar alt='student' src={require("../assets/images/studentCourse.jpg")} sx={{ width: "auto", height: "auto" }} variant="square"
                     />
                     <Typography variant="body2">
                       {course.description}
