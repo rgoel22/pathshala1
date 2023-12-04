@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
 import Loading from './Loading';
+import ConfirmDelete from './ConfirmDelete';
 import { useLoading } from '../context/loadingContext';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -34,6 +35,7 @@ const CourseTable = () => {
   const [options, setOptions] = React.useState([]);
   const autocompleteLoading = open && options.length === 0;
   const [autocompleteData, setAutocompleteData] = useState([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -58,7 +60,7 @@ const CourseTable = () => {
   useEffect(() => {
     setLoading(true);
     // Fetch data from the API when the component mounts
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses',{
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses', {
       headers: {
         "Content-Type": "application/json",
         "authorization-token": localStorage.getItem("token"),
@@ -79,7 +81,7 @@ const CourseTable = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor',{
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor', {
       headers: {
         "Content-Type": "application/json",
         "authorization-token": localStorage.getItem("token"),
@@ -111,7 +113,7 @@ const CourseTable = () => {
   };
 
   const handleDeleteClick = (id) => {
-    console.log(`Delete button clicked for id ${id}`);
+    setShowDeleteConfirm(true)
   };
 
   const handleModalClose = () => {
@@ -129,12 +131,12 @@ const CourseTable = () => {
     fetch(url, {
       method: "POST", headers: {
         "Content-Type": "application/json",
-      
-            "authorization-token": localStorage.getItem("token"),
-            "userId": localStorage.getItem("userId"),
-            "userType": localStorage.getItem("userType"),
-          
-        
+
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+
+
       },
       body: JSON.stringify(newModalData)
     }).then((res) => res.json()).then(newRow => {
@@ -148,6 +150,14 @@ const CourseTable = () => {
     handleModalClose();
   };
 
+  const handleDeleteConfirm = () => {
+    console.log("handleDeleteConfirm")
+    // TODO: make delete request
+  }
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false)
+  }
+
 
   // Assuming data is an array of objects with fields like 'name', 'courseCode' etc.
   let userId;
@@ -157,6 +167,7 @@ const CourseTable = () => {
   return (
     <>
       {loading && <Loading />}
+      {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
       <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
         Manage Courses
       </Typography>
@@ -241,11 +252,12 @@ const CourseTable = () => {
             onClose={() => {
               setOpen(false);
             }}
-            // onChange={(event, value) => console.log(value)}
 
-            // isOptionEqualToValue={(option, value) => { console.log(modalData, option, value, 'dsdaf') }}
-            getOptionLabel={(option) => { return option.firstName + " " + option.lastName }}
+            onChange={(event, value) => { value && setModalData({ ...modalData, instructorId: value.id, instructorName: value.firstName + " " + value.lastName }) }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => { return (option.firstName + " " + option.lastName) }}
             options={options}
+            value={modalData.instructorId ? { firstName: modalData.instructorName, lastName: "" } : null}
             loading={autocompleteLoading}
             renderInput={(params) => (
               <TextField
@@ -263,8 +275,6 @@ const CourseTable = () => {
               />
             )}
           />
-          {modalData.instructorId}
-          {modalData.name}
           {/* Add other fields as needed */}
         </DialogContent>
         <div style={{ padding: '10px', textAlign: 'right' }}>

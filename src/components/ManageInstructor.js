@@ -17,7 +17,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Loading from "./Loading";
+import ConfirmDelete from './ConfirmDelete';
 import { useLoading } from "../context/loadingContext";
+import useAlert from "../hooks/useAlert";
 
 const InstrunctorTable = () => {
   const [data, setData] = useState([]);
@@ -26,7 +28,8 @@ const InstrunctorTable = () => {
   const [modalAction, setModalAction] = useState("add");
   const [selectedRowKey, setSelectedRowKey] = useState(null);
   const { loading, setLoading } = useLoading();
-
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { setAlert } = useAlert();;
   useEffect(() => {
     setLoading(true);
     // Fetch data from the API when the component mounts
@@ -66,8 +69,35 @@ const InstrunctorTable = () => {
   };
 
   const handleDeleteClick = (id) => {
-    console.log(`Delete button clicked for id ${id}`);
+    setModalData(id);
+    setShowDeleteConfirm(true)
   };
+  const handleDeleteConfirm = () => {
+    let url = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/deleteUser/${modalData.id}`;
+    try {
+      fetch(url, {
+        method: "DELETE", headers: {
+          "Content-Type": "application/json",
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType")
+        },
+      }).then(newRow => {
+        data.splice(data.indexOf(modalData), 1)
+        setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, 'success')
+        setShowDeleteConfirm(false)
+      }).catch((err) => {
+        setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
+        setShowDeleteConfirm(false)
+      })
+    } catch (err) {
+      setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
+      setShowDeleteConfirm(false)
+    }
+  }
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false)
+  }
 
   const handleModalClose = () => {
     setOpenModal(false);
@@ -137,6 +167,7 @@ const InstrunctorTable = () => {
   return (
     <>
       {loading && <Loading />}
+      {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
       <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
         Manage Instructors
       </Typography>
