@@ -6,15 +6,19 @@ import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user/user.context';
 import { Avatar, Box, Card, CardActions, CardContent, Dialog, Grid, IconButton } from '@mui/material';
+import CourseDetails from './CourseDetails';
 
 const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
+  const navigate = useNavigate(); // Add the useNavigate hook
 
   const handleViewCourse = (course) => {
     setModalData(course);
     setOpenModal(true);
+    console.log('Selected courseId:', course.id);
+    navigate(`/instructor/courseDetails/${course.id}`, { state: { courseId: course.id } });
   }
 
   const handleModalClose = () => {
@@ -67,7 +71,7 @@ const InstructorDashboard = () => {
         })}
       </Grid>
       <Dialog open={openModal} onClose={handleModalClose}>
-        Helo
+        <CourseDetails courseId={modalData.id} />
       </Dialog>
     </>
   );

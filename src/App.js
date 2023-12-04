@@ -18,6 +18,7 @@ import { AlertProvider } from "./context/alertContext";
 import AlertPopup from "./components/AlertPopup";
 import InstructorDashboard from "./components/InstructorDashboard";
 import StudentsDashboard from "./components/StudentsDashboard";
+import CourseDetails from "./components/CourseDetails";
 
 
 function CourseForm(props) {
@@ -30,26 +31,26 @@ function CourseForm(props) {
   );
 }
 
-function CourseDetails(props) {
-  const { id } = props;
-  const { user } = useContext(UserContext);
-  const { courses } = useContext(CoursesContext);
+// function CourseDetails1(props) {
+//   const { id } = props;
+//   const { user } = useContext(UserContext);
+//   const { courses } = useContext(CoursesContext);
 
-  const course = courses.find((entry) => entry.id === id);
-  console.log(course);
-  if (user === USER_TYPES.STUDENT) {
-    return <div>Student View</div>;
-  } else if (user === USER_TYPES.INSTRUCTOR) {
-    return (
-      <div className="course-details-instructor">
-        <button className="course-action">Edit Course</button>
-        <button className="course-action">Add Topic</button>
-        <button className="course-action">Add Study Material</button>
-        <CourseForm {...course} />
-      </div>
-    );
-  }
-}
+//   const course = courses.find((entry) => entry.id === id);
+//   console.log(course);
+//   if (user === USER_TYPES.STUDENT) {
+//     return <div>Student View</div>;
+//   } else if (user === USER_TYPES.INSTRUCTOR) {
+//     return (
+//       <div className="course-details-instructor">
+//         <button className="course-action">Edit Course</button>
+//         <button className="course-action">Add Topic</button>
+//         <button className="course-action">Add Study Material</button>
+//         <CourseForm {...course} />
+//       </div>
+//     );
+//   }
+// }
 
 function CourseCard(props) {
   const { name, id } = props;
@@ -135,6 +136,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<SignIn />} />
                 <Route path="/instructor" element={<InstructorDashboard />} />
+                <Route path="/instructor/courseDetails/:courseId" element={<CourseDetails/>} />
                 <Route path="/student" element={<StudentsDashboard />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/admin" element={<AdminPage />} />
