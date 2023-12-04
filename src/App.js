@@ -19,6 +19,7 @@ import AlertPopup from "./components/AlertPopup";
 import InstructorDashboard from "./components/InstructorDashboard";
 import StudentsDashboard from "./components/StudentsDashboard";
 import CourseDetails from "./components/CourseDetails";
+import AllCourses from "./components/AllCourses";
 
 
 function CourseForm(props) {
@@ -146,6 +147,7 @@ function App() {
                   element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
                 />
                 <Route path="/admin/courses" element={<AddCourse />} />
+                <Route path="/student/allCourses" element={<AllCourses />} />
               </Routes>
             </AlertProvider>
           </CoursesProvider>

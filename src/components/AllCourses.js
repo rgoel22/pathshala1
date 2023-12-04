@@ -5,46 +5,39 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user/user.context';
-import { Avatar, Box, Card, CardActions, CardContent, Dialog, Grid, IconButton } from '@mui/material';
+import { Avatar, Box, Card, CardActions, CardContent, Grid, IconButton, Dialog } from '@mui/material';
 
-const StudentsDashboard = () => {
+const AllCourses = () => {
   const [courses, setCourses] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [modalData, setModalData] = useState({});
-  const navigate = useNavigate();
-
-  const handleViewCourse = (course) => {
-    setModalData(course);
-    setOpenModal(true);
-  };
-
-  const handleModalClose = () => {
-    setOpenModal(false);
-  };
 
   useEffect(() => {
-    var id = JSON.parse(localStorage.getItem('user')).userDetails.id;
-    fetch(
-      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/student?userId=" + id
-    )
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses')
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setCourses(data);
       });
-
   }, []);
+
+const [openModal, setOpenModal] = useState(false);
+
+const handleModalClose = () => {
+  setOpenModal(false);
+};
+
 
   return (
     <>
-      <AppBar position="static">
+        <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Enrolled Courses
-          </Typography>
-          <Button color="inherit" onClick={() => navigate('/student/allCourses')}>All Courses</Button>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            All Courses
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+            <Link to="/student" style={{ color: 'white', textDecoration: 'none' }}>Enrolled Courses</Link>
+            </Box>
         </Toolbar>
-      </AppBar>
+        </AppBar>
 
       <Grid container spacing={8} height="100vh" direction="row" alignItems="center" p={10}>
         {courses.map((course) => (
@@ -56,22 +49,15 @@ const StudentsDashboard = () => {
                     {course.name}
                   </Typography>
                   <Avatar
-                    alt='student'
-                    src={require("../assets/images/studentCourse.jpg")}
+                    alt='allCourses'
+                    src={require("../assets/images/allCourse.jpg")}
                     sx={{ width: "auto", height: "auto" }}
                     variant="square"
                   />
                   <Typography variant="body2">{course.description}</Typography>
                 </CardContent>
-                <CardActions sx={{ justifyContent: "end" }}>
-                  <Button
-                    size="small"
-                    color='primary'
-                    variant="outlined"
-                    onClick={() => handleViewCourse(course)}
-                  >
-                    View Course
-                  </Button>
+                <CardActions sx={{ justifyContent: 'end' }}>
+                  <Button size="small" color="primary" variant="outlined" href={`/courses/${course.id}`}>Enroll</Button>
                 </CardActions>
               </Card>
             </Box>
@@ -79,10 +65,10 @@ const StudentsDashboard = () => {
         ))}
       </Grid>
       <Dialog open={openModal} onClose={handleModalClose}>
-        Helo
+        Hello
       </Dialog>
     </>
   );
 };
 
-export default StudentsDashboard;
+export default AllCourses;
