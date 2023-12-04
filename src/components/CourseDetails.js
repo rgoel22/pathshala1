@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const CourseDetails = () => {
   const [course, setCourse] = useState({});
@@ -107,26 +107,26 @@ const CourseDetails = () => {
 
   async function handleEnrolledStudents(course) {
     const response = await fetch(
-    `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/${courseId}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "authorization-token": localStorage.getItem("token"),
-        "userId": localStorage.getItem("userId"),
-        "userType": localStorage.getItem("userType"),
-      },
-    }
-  );
+      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/${courseId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType"),
+        },
+      }
+    );
 
-  if (response.ok) {
-    const fullCourseData = await response.json();
-    navigate(`/instructor/courseDetails/enrolledStudents/${fullCourseData.id}`, {
-      state: { courseId: fullCourseData.id },
-    });
-  } else {
-    // Handle error scenario
-    console.error("Failed to fetch course details:", response.status);
-  }
+    if (response.ok) {
+      const fullCourseData = await response.json();
+      navigate(`/instructor/courseDetails/enrolledStudents/${fullCourseData.id}`, {
+        state: { courseId: fullCourseData.id },
+      });
+    } else {
+      // Handle error scenario
+      console.error("Failed to fetch course details:", response.status);
+    }
   }
 
   if (!course) {
@@ -138,6 +138,45 @@ const CourseDetails = () => {
     backgroundColor: isCourseUpdated ? "#007bff" : "#cccccc", // Disable the button if the course is not updated
     cursor: isCourseUpdated ? "pointer" : "default", // Change cursor style based on button state
   };
+
+  const handleFileUpload = async (e) => {
+    console.log(e.target.files, 'here')
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
+    const response = await fetch(
+      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/upload`,
+      {
+        method: "POST",
+        headers: {
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType"),
+        },
+        body: formData
+      }
+    );
+
+  }
+
+  const handleFileDownload = () => {
+    fetch(
+      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701714457927_7379990347.pdf`,
+      {
+        method: "GET",
+        headers: {
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType"),
+        },
+      }
+    )
+      .then((res) => res.blob())
+      .then((data) => {
+        const file = window.URL.createObjectURL(data);
+        window.open(file);
+      })
+      .catch((error) => console.error("API error:", error));
+  }
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -164,6 +203,22 @@ const CourseDetails = () => {
           onChange={handleSyllabusChange}
         />
       </div>
+      <Button
+        variant="contained"
+        component="label"
+      >
+        Upload Study Material
+        <input
+          type="file"
+          hidden
+          onChange={(e) => handleFileUpload(e)}
+        />
+      </Button>
+      <Button onClick={handleFileDownload}>
+        Download Study Material
+      </Button>
+      <br />
+      <br />
       <button style={buttonStyle} onClick={handleEditCourse}>
         {!editMode ? "Edit Course" : "Cancel Edit"}
       </button>
