@@ -25,14 +25,18 @@ export default function SignIn(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const body = {
+        var body = {
             userId: data.get('userid'),
             password: data.get('password'),
+            ip: ""
         };
 
         setLoading(true);
 
         try {
+            const ip = await fetch("https://api.ipify.org/?format=json").then((response) => response.json())
+            .then(data => body.ip = data.ip)
+
             const response = await fetch(
                 "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/login",
                 {
