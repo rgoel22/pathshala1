@@ -69,7 +69,6 @@ const EnrolledStudents = () => {
                   {header[1]}
                 </TableCell>
               ))}
-              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
