@@ -48,6 +48,14 @@ export default function SignIn(props) {
                 setAlert('Login success!', 'success')
                 const data = await response.json();
                 localStorage.setItem('user', JSON.stringify(data));
+                let auth = {};
+                auth.loggedInUserId = data.userId;
+                auth.userType = data.userType;
+                auth.token = data.token;
+                localStorage.setItem('auth', JSON.stringify(auth));
+                localStorage.setItem('userId', data.userId);
+                localStorage.setItem('userType', data.userType);
+                localStorage.setItem('token', data.token);
                 if (data.userType === USER_TYPES.ADMIN) {
                     changeUser(data);
                     navigate("/admin");

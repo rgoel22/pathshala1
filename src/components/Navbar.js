@@ -19,7 +19,14 @@ const Navbar = () => {
   const { changeUser, user } = useContext(UserContext);
   const handleLogout = () => {
     var id = JSON.parse(localStorage.getItem('user')).userDetails.id
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/logout?userId=' + id)
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/logout?userId=' + id, {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      }
+    })
     .then(changeUser(null))
     navigate('/'); // Use the navigate function to redirect to the SignIn page
   };

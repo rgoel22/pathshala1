@@ -11,7 +11,14 @@ const AllCourses = () => {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses')
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses', {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

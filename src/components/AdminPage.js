@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+
 import { Link } from "react-router-dom";
 import Container from "@mui/material/Container";
 import { UserContext, useUser } from "../context/user/user.context";
@@ -13,11 +14,6 @@ const AdminPage = () => {
   const { user, logout } = useUser();
   const { changeUser } = useContext(UserContext);
 
-  const handleLogout = useCallback(() => {
-    // logout();
-    changeUser(null);
-    console.log("Logout clicked");
-  }, []);
 
   return (
     <div className="admin-page">
@@ -56,7 +52,7 @@ const AdminPage = () => {
       <div className='admin-card-container'>
       <CardContainer1
         to="/admin/manageUsers"
-        title="Manage Students"
+        title="Manage Users"
         titleStyle={{ fontSize: "24px", fontWeight: "bold", color: "#4CAF50" }}
         description="Manage users in the system"
         descriptionStyle={{ fontSize: "16px", color: "#555" }}

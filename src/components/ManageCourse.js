@@ -35,8 +35,6 @@ const CourseTable = () => {
   const autocompleteLoading = open && options.length === 0;
   const [autocompleteData, setAutocompleteData] = useState([]);
 
-
-
   useEffect(() => {
     let active = true;
 
@@ -60,7 +58,14 @@ const CourseTable = () => {
   useEffect(() => {
     setLoading(true);
     // Fetch data from the API when the component mounts
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses')
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses',{
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      }
+    })
       .then(response => response.json())
       .then(data => {
         setData(data);
@@ -74,7 +79,14 @@ const CourseTable = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor')
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor',{
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      }
+    })
       .then(response => response.json()).then(result => {
         console.log(result);
         setAutocompleteData(result);
@@ -117,9 +129,22 @@ const CourseTable = () => {
     fetch(url, {
       method: "POST", headers: {
         "Content-Type": "application/json",
+      
+            "authorization-token": localStorage.getItem("token"),
+            "userId": localStorage.getItem("userId"),
+            "userType": localStorage.getItem("userType"),
+          
+        
       },
       body: JSON.stringify(newModalData)
-    }).then((res) => console.log(res)).catch((err) => console.log(err))
+    }).then((res) => res.json()).then(newRow => {
+      setData(prev => {
+        return prev.map(d => {
+          if (newRow.id === d.id) return newModalData;
+          else return d;
+        })
+      });
+    }).catch((err) => console.log(err))
     handleModalClose();
   };
 
@@ -151,6 +176,7 @@ const CourseTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
+
             {data.map((row) => (
               <TableRow key={row.id}>
                 {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
