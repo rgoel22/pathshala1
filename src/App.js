@@ -20,6 +20,7 @@ import InstructorDashboard from "./components/InstructorDashboard";
 import StudentsDashboard from "./components/StudentsDashboard";
 import CourseDetails from "./components/CourseDetails";
 import AllCourses from "./components/AllCourses";
+import EnrolledStudents from "./components/EnrolledStudents";
 
 
 function CourseForm(props) {
@@ -148,6 +149,7 @@ function App() {
                 />
                 <Route path="/admin/courses" element={<AddCourse />} />
                 <Route path="/student/allCourses" element={<AllCourses />} />
+                <Route path="/instructor/courseDetails/enrolledStudents/:courseId" element={<EnrolledStudents />} />
               </Routes>
             </AlertProvider>
           </CoursesProvider>

@@ -44,8 +44,8 @@ const InstructorDashboard = () => {
         headers: {
           "Content-Type": "application/json",
           "authorization-token": localStorage.getItem("token"),
-          userId: localStorage.getItem("userId"),
-          userType: localStorage.getItem("userType"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType"),
         },
       }
     )

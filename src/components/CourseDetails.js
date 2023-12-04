@@ -105,6 +105,11 @@ const CourseDetails = () => {
     navigate("/instructor"); // Navigate back to InstructorDashboard.js
   };
 
+  const handleEnrolledStudents = (course) =>{
+    navigate(`/instructor/courseDetails/enrolledStudents/${course.id}`, {
+      state: { courseId: course.id },
+    });
+  }
   if (!course) {
     return <div>Loading...</div>; // You may want to add a loading indicator
   }
@@ -149,6 +154,9 @@ const CourseDetails = () => {
         disabled={!isCourseUpdated}
       >
         Publish Course
+      </button>
+      <button style={buttonStyle} onClick={handleEnrolledStudents}>
+        Enrolled Students
       </button>
       <button style={buttonStyle} onClick={handleGoBack}>
         Go Back To Dashboard
