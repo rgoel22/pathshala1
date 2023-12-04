@@ -8,6 +8,7 @@ const CourseDetails = () => {
   const navigate = useNavigate();
 
   const [editMode, setEditMode] = useState(false);
+  const [isCourseUpdated, setIsCourseUpdated] = useState(false);
 
   const buttonStyle = {
     backgroundColor: '#007bff',
@@ -47,7 +48,12 @@ const CourseDetails = () => {
   }, [courseId]);
 
   const handleEditCourse = () => {
-    if (editMode) {
+    setEditMode(!editMode); // Toggle edit mode
+    setIsCourseUpdated(false); // Reset the 'isCourseUpdated' flag
+  };
+
+  const handleSaveChanges = () => {
+    if (editMode && isCourseUpdated) {
       // Send updated course information to backend using API call
       fetch(`https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses`, {
         method: 'POST',
@@ -61,21 +67,22 @@ const CourseDetails = () => {
         console.log('API response:', data);
         setCourse(data); // Update the 'course' state variable with the updated data
         setEditMode(false); // Reset edit mode
+        setIsCourseUpdated(false); // Reset the 'isCourseUpdated' flag
       })
       .catch(error => console.error('API error:', error));
-    } else {
-      setEditMode(true);
     }
   };
 
   const handleDescriptionChange = (event) => {
     const updatedCourse = { ...course, description: event.target.value };
     setCourse(updatedCourse);
+    setIsCourseUpdated(true); // Set the 'isCourseUpdated' flag to true
   };
 
   const handleSyllabusChange = (event) => {
     const updatedCourse = { ...course, syllabus: event.target.value };
     setCourse(updatedCourse);
+    setIsCourseUpdated(true); // Set the 'isCourseUpdated' flag to true
   };
 
   const handleGoBack = () => {
@@ -86,23 +93,29 @@ const CourseDetails = () => {
     return <div>Loading...</div>; // You may want to add a loading indicator
   }
 
+  const publishButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: isCourseUpdated ? '#007bff' : '#cccccc', // Disable the button if the course is not updated
+    cursor: isCourseUpdated ? 'pointer' : 'default', // Change cursor style based on button state
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
       <h1 style={{ textAlign: 'center' }}>Selected Course: {course.name}</h1>
-      <b>Course Description:</b>
       <div style={textStyle}>
-        <br/>
+        <b>Course Description:</b>
+        <br />
         <textarea
-          id="description"
-          style={textBoxStyle}
-          value={course.description}
-          disabled={!editMode}
-          onChange={handleDescriptionChange}
+        id="description"
+        style={textBoxStyle}
+        value={course.description}
+        disabled={!editMode}
+        onChange={handleDescriptionChange}
         />
       </div>
-      <b>Syllabus:</b>
       <div style={textStyle}>
-        <br/>
+        <b>Syllabus:</b>
+        <br />
         <textarea
           id="syllabus"
           style={textBoxStyle}
@@ -112,7 +125,10 @@ const CourseDetails = () => {
         />
       </div>
       <button style={buttonStyle} onClick={handleEditCourse}>
-        {!editMode ? 'Edit Course' : 'Save Changes'}
+        {!editMode ? 'Edit Course' : 'Cancel Edit'}
+      </button>
+      <button style={publishButtonStyle} onClick={handleSaveChanges} disabled={!isCourseUpdated}>
+        Publish Course
       </button>
       <button style={buttonStyle} onClick={handleGoBack}>
         Go Back To Dashboard
