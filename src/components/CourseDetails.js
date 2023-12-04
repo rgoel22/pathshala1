@@ -105,11 +105,30 @@ const CourseDetails = () => {
     navigate("/instructor"); // Navigate back to InstructorDashboard.js
   };
 
-  const handleEnrolledStudents = (course) =>{
-    navigate(`/instructor/courseDetails/enrolledStudents/${course.id}`, {
-      state: { courseId: course.id },
+  async function handleEnrolledStudents(course) {
+    const response = await fetch(
+    `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/${courseId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      },
+    }
+  );
+
+  if (response.ok) {
+    const fullCourseData = await response.json();
+    navigate(`/instructor/courseDetails/enrolledStudents/${fullCourseData.id}`, {
+      state: { courseId: fullCourseData.id },
     });
+  } else {
+    // Handle error scenario
+    console.error("Failed to fetch course details:", response.status);
   }
+  }
+
   if (!course) {
     return <div>Loading...</div>; // You may want to add a loading indicator
   }
