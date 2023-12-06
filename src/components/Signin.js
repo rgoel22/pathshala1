@@ -19,12 +19,11 @@ const defaultTheme = createTheme();
 
 export default function SignIn(props) {
 
-    const { register, handleSubmit, formState } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const { loading, setLoading } = useLoading();
     const { setAlert } = useAlert();
     const navigate = useNavigate(); // Get the navigate function
     const { changeUser } = React.useContext(UserContext);
-    const { errors } = formState;
 
     const handleSignInSubmit = async (formData) => {
 

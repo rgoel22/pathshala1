@@ -13,6 +13,7 @@ import { useLoading } from '../context/loadingContext';
 import Loading from './Loading';
 import useAlert from '../hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -23,19 +24,18 @@ export default function SignUp() {
     const { loading, setLoading } = useLoading();
     const { setAlert } = useAlert();;
     const navigate = useNavigate();
-    const handleSubmit = async (event) => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const handleSignupSubmit = async (formData) => {
         setLoading(true)
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
         const body = {
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            emailId: data.get('email'),
-            phoneNumber: data.get('mobileNumber'),
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            emailId: formData.email,
+            phoneNumber: formData.mobileNumber,
             userType: "STUDENT",
-            userId: data.get('userid'),
-            password: data.get('password'),
-            rePassword: data.get('retype-password'),
+            userId: formData.userid,
+            password: formData.password,
+            rePassword: formData.retypePassword,
         }
         try {
             const response = await fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/signUp', {
@@ -78,7 +78,7 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <form onSubmit={handleSubmit(handleSignupSubmit)} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -89,6 +89,9 @@ export default function SignUp() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    {...register("firstName", { required: "First name is required" })}
+                                    error={!!errors.firstName}
+                                    helperText={errors.firstName?.message}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -99,6 +102,9 @@ export default function SignUp() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    {...register("lastName", { required: "Last name is required" })}
+                                    error={!!errors.lastName}
+                                    helperText={errors.lastName?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -109,6 +115,9 @@ export default function SignUp() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    {...register("email", { required: "Email is required" })}
+                                    error={!!errors.email}
+                                    helperText={errors.email?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -119,6 +128,11 @@ export default function SignUp() {
                                     label="Mobile Number"
                                     name="mobileNumber"
                                     autoComplete="mobileNumber"
+                                    type='number'
+                                    maxlength="10"
+                                    {...register("mobileNumber", { required: "Mobile Number is required" })}
+                                    error={!!errors.mobileNumber}
+                                    helperText={errors.mobileNumber?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -129,6 +143,9 @@ export default function SignUp() {
                                     label="User Id"
                                     name="userid"
                                     autoComplete="userid"
+                                    {...register("userid", { required: "User Id is required" })}
+                                    error={!!errors.userid}
+                                    helperText={errors.userid?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -140,17 +157,23 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    {...register("password", { required: "Password is required" })}
+                                    error={!!errors.password}
+                                    helperText={errors.password?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    name="retype-password"
+                                    name="retypePassword"
                                     label="Retype Password"
-                                    type="retype-password"
-                                    id="retype-password"
-                                    autoComplete="new-retype-password"
+                                    type="retypePassword"
+                                    id="retypePassword"
+                                    autoComplete="new-retypePassword"
+                                    {...register("retypePassword", { required: "Retype Password is required" })}
+                                    error={!!errors.retypePassword}
+                                    helperText={errors.retypePassword?.message}
                                 />
                             </Grid>
                         </Grid>
@@ -169,7 +192,7 @@ export default function SignUp() {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </Box>
+                    </form>
                 </Box>
             </Container>
         </ThemeProvider>
