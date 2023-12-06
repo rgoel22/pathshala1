@@ -27,7 +27,7 @@ const Navbar = () => {
         "userType": localStorage.getItem("userType"),
       }
     })
-    .then(changeUser(null))
+      .then(changeUser(null))
     navigate('/'); // Use the navigate function to redirect to the SignIn page
   };
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,9 +61,10 @@ const Navbar = () => {
           }
           label="Grey Scale"
         />
-        <Button component={Link} to="/admin" color="inherit">
-          Admin Home
-        </Button>
+        {localStorage.getItem('userType') === 'ADMIN' &&
+          <Button component={Link} to="/admin" color="inherit">
+            Admin Home
+          </Button>}
         <Button color="inherit" onClick={handleClick}
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"

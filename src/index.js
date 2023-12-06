@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
-import Loading from './components/Loading';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -12,8 +11,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      {/* <Loading />
-      <img src={require("./assets/images/pathshala.jpg")} alt="Pathshala" /> */}
       <App />
     </BrowserRouter>
   </React.StrictMode>

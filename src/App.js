@@ -22,6 +22,8 @@ import CourseDetails from "./components/CourseDetails";
 import AllCourses from "./components/AllCourses";
 import EnrolledStudents from "./components/EnrolledStudents";
 
+import MainLoading from './components/MainLoading';
+
 
 function CourseForm(props) {
   const { name, description } = props;
@@ -128,34 +130,37 @@ function PrivateRoute(props) {
 function App() {
   const location = useLocation();
   return (
-    <LoadingProvider>
-      <RouterProvider>
-        <UserProvider>
-          <CoursesProvider>
-            <AlertProvider>
-              <AlertPopup />
-              {location.pathname !== '/' && location.pathname !== '/signup' && <Navbar />}
-              <Routes>
-                <Route path="/" element={<SignIn />} />
-                <Route path="/instructor" element={<InstructorDashboard />} />
-                <Route path="/instructor/courseDetails/:courseId" element={<CourseDetails/>} />
-                <Route path="/student" element={<StudentsDashboard />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/admin/manageUsers" element={<ManageUsers />} />
-                <Route
-                  path="/admin/manageInstructor"
-                  element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
-                />
-                <Route path="/admin/courses" element={<AddCourse />} />
-                <Route path="/student/allCourses" element={<AllCourses />} />
-                <Route path="/instructor/courseDetails/enrolledStudents/:courseId" element={<EnrolledStudents />} />
-              </Routes>
-            </AlertProvider>
-          </CoursesProvider>
-        </UserProvider>
-      </RouterProvider>
-    </LoadingProvider>
+    <MainLoading imageSrc={require("./assets/images/pathshala.jpg")}>
+      <LoadingProvider>
+        <RouterProvider>
+          <UserProvider>
+            <CoursesProvider>
+              <AlertProvider>
+                <AlertPopup />
+                {location.pathname !== '/' && location.pathname !== '/signup' && <Navbar />}
+                <Routes>
+                  <Route path="/" element={<SignIn />} />
+                  <Route path="/instructor" element={<InstructorDashboard />} />
+                  <Route path="/instructor/courseDetails/:courseId" element={<CourseDetails />} />
+                  <Route path="/student" element={<StudentsDashboard />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="/admin/manageUsers" element={<ManageUsers />} />
+                  <Route
+                    path="/admin/manageInstructor"
+                    element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
+                  />
+                  <Route path="/admin/courses" element={<AddCourse />} />
+                  <Route path="/student/allCourses" element={<AllCourses />} />
+                  <Route path="/instructor/courseDetails/enrolledStudents/:courseId" element={<EnrolledStudents />} />
+                </Routes>
+              </AlertProvider>
+            </CoursesProvider>
+          </UserProvider>
+        </RouterProvider>
+      </LoadingProvider>
+
+    </MainLoading>
   );
 }
 
