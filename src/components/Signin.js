@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,30 +14,33 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import useAlert from '../hooks/useAlert';
 import { USER_TYPES } from "../constants";
 import { UserContext } from "../context/user/user.context";
+import { useForm } from "react-hook-form";
 const defaultTheme = createTheme();
 
 export default function SignIn(props) {
+
+    const { register, handleSubmit, formState } = useForm();
     const { loading, setLoading } = useLoading();
     const { setAlert } = useAlert();
     const navigate = useNavigate(); // Get the navigate function
     const { changeUser } = React.useContext(UserContext);
+    const { errors } = formState;
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+    const handleSignInSubmit = async (formData) => {
+
         var body = {
-            userId: data.get('userid'),
-            password: data.get('password'),
+            userId: formData.userid,
+            password: formData.password,
             ip: ""
         };
 
         setLoading(true);
 
         try {
-            await fetch("https://api.ipify.org/?format=json", {
-                mode: 'no-cors'
-            }).then((response) => response.json())
-                .then(data => body.ip = data.ip)
+            // await fetch("https://api.ipify.org/?format=json", {
+            //     mode: 'no-cors'
+            // }).then((response) => response.json())
+            //     .then(data => body.ip = data.ip)
 
             const response = await fetch(
                 "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/login",
@@ -97,16 +100,12 @@ export default function SignIn(props) {
                         alignItems: "center",
                     }}
                 >
-                    <Avatar alt='Pathshalo' src={require("../assets/images/pathshala.jpg")} sx={{ width: 200, height: 200 }} variant="square" />
+                    <Avatar alt='Pathshala' src={require("../assets/images/pathshala.jpg")} sx={{ width: 200, height: 200 }} variant="square" />
                     <Typography component="h1" variant="h5">
                         Sign In
                     </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        noValidate
-                        sx={{ mt: 1 }}
-                    >
+                    <form onSubmit={handleSubmit(handleSignInSubmit)} noValidate>
+
                         <TextField
                             margin="normal"
                             required
@@ -114,9 +113,13 @@ export default function SignIn(props) {
                             id="userid"
                             label="User ID"
                             name="userid"
-                            autoComplete="userid"
+                            type='userid'
                             autoFocus
+                            {...register("userid", { required: "User Id is required" })}
+                            error={!!errors.userid}
+                            helperText={errors.userid?.message}
                         />
+
                         <TextField
                             margin="normal"
                             required
@@ -125,8 +128,11 @@ export default function SignIn(props) {
                             label="Password"
                             type="password"
                             id="password"
-                            autoComplete="current-password"
+                            {...register("password", { required: "Password is required" })}
+                            error={!!errors.password}
+                            helperText={errors.password?.message}
                         />
+
                         <Link href="/signup" variant="body2">
                             {"Don't have an account? Sign Up"}
                         </Link>
@@ -138,7 +144,7 @@ export default function SignIn(props) {
                         >
                             Sign In
                         </Button>
-                    </Box>
+                    </form>
                 </Box>
             </Container>
         </ThemeProvider>
