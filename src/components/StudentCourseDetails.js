@@ -50,18 +50,26 @@ const StudentCourseDetails = () => {
   }, [courseId]);
 
   const handleFileDownload = () => {
-    fetch(
-      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701934321914_certificate.pdf`,
-      {
-        method: "GET",
-        headers: {
-          "authorization-token": localStorage.getItem("token"),
-          "userId": localStorage.getItem("userId"),
-          "userType": localStorage.getItem("userType"),
-        },
-      }
-    )
-      .then((res) => res.blob())
+    if (!course.filePath) {
+      console.error("File path is null. Cannot download.");
+      return;
+    }
+    const downloadUrl = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=${course.filePath}`;
+  
+    fetch(downloadUrl, {
+      method: "GET",
+      headers: {
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.blob();
+      })
       .then((data) => {
         const file = window.URL.createObjectURL(data);
         window.open(file);

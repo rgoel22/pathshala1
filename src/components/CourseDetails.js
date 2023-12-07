@@ -166,7 +166,7 @@ const CourseDetails = () => {
     const formData = new FormData();
     formData.append('file', e.target.files[0]);
     const response = await fetch(
-      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/upload`,
+      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/upload?courseId=${course.id}`,
       {
         method: "POST",
         headers: {
@@ -177,22 +177,33 @@ const CourseDetails = () => {
         body: formData
       }
     );
+    const text = await response.text();
+    setCourse({ ...course, filePath: text })
 
   }
 
   const handleFileDownload = () => {
-    fetch(
-      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701934321914_certificate.pdf`,
-      {
-        method: "GET",
-        headers: {
-          "authorization-token": localStorage.getItem("token"),
-          "userId": localStorage.getItem("userId"),
-          "userType": localStorage.getItem("userType"),
-        },
-      }
-    )
-      .then((res) => res.blob())
+    if (!course.filePath) {
+      console.error("File path is null. Cannot download.");
+      return;
+    }
+  
+    const downloadUrl = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=${course.filePath}`;
+  
+    fetch(downloadUrl, {
+      method: "GET",
+      headers: {
+        "authorization-token": localStorage.getItem("token"),
+        "userId": localStorage.getItem("userId"),
+        "userType": localStorage.getItem("userType"),
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.blob();
+      })
       .then((data) => {
         const file = window.URL.createObjectURL(data);
         window.open(file);
@@ -243,9 +254,16 @@ const CourseDetails = () => {
           <input type="file" hidden onChange={(e) => handleFileUpload(e)} />
         </Button>
 
-        <Button onClick={handleFileDownload} style={primaryButtonStyle}>
-          Download Study Material
-        </Button>
+        {course.filePath ? ( // Conditionally render the download button
+          <Button onClick={handleFileDownload} style={primaryButtonStyle}>
+            Download Study Material
+          </Button>
+        ) : (
+          // Render a disabled button if filePath is null
+          <Button style={{ ...primaryButtonStyle, pointerEvents: "none" }} disabled>
+            Download Study Material
+          </Button>
+        )}
       </Paper>
 
       <Grid container justifyContent="center" spacing={2}>
