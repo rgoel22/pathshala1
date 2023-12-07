@@ -125,7 +125,6 @@ const CourseTable = () => {
 
   const handleSaveData = () => {
     // Handle saving data (add/edit) here
-    // You may want to send a request to your API to save the changes
     let newModalData = {
       ...modalData,
       "id": selectedRowKey
@@ -167,6 +166,9 @@ const CourseTable = () => {
         data.splice(data.indexOf(modalData), 1)
         setAlert(`${modalData.name}deleted`, 'success')
         setShowDeleteConfirm(false)
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }).catch((err) => {
         setAlert(`Error in deleting ${modalData.name}`, 'error')
         setShowDeleteConfirm(false)
