@@ -21,6 +21,7 @@ import StudentsDashboard from "./components/StudentsDashboard";
 import CourseDetails from "./components/CourseDetails";
 import AllCourses from "./components/AllCourses";
 import EnrolledStudents from "./components/EnrolledStudents";
+import UploadStudyMaterial from "./components/UploadStudyMaterial";
 
 import MainLoading from './components/MainLoading';
 
@@ -142,6 +143,7 @@ function App() {
                   <Route path="/" element={<SignIn />} />
                   <Route path="/instructor" element={<InstructorDashboard />} />
                   <Route path="/instructor/courseDetails/:courseId" element={<CourseDetails />} />
+                  <Route path="/instructor/courseDetails/:courseId/uploadMaterial/:courseId" element={<UploadStudyMaterial/>} />
                   <Route path="/student" element={<StudentsDashboard />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/admin" element={<AdminPage />} />

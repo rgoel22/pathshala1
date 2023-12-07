@@ -1,6 +1,10 @@
+// CourseDetails.js
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { Document, Page } from 'react-pdf';
+import { Viewer } from 'react-doc-viewer';
 
 const CourseDetails = () => {
   const [course, setCourse] = useState({});
@@ -9,6 +13,7 @@ const CourseDetails = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [isCourseUpdated, setIsCourseUpdated] = useState(false);
+  const [uploadedMaterial, setUploadedMaterial] = useState(null);
 
   const buttonStyle = {
     backgroundColor: "#007bff",
@@ -129,6 +134,10 @@ const CourseDetails = () => {
     }
   }
 
+  const handleUploadMaterial = () => {
+    navigate(`/instructor/courseDetails/${courseId}/uploadMaterial/${courseId}`);
+  };
+
   if (!course) {
     return <div>Loading...</div>; // You may want to add a loading indicator
   }
@@ -136,11 +145,10 @@ const CourseDetails = () => {
   const publishButtonStyle = {
     ...buttonStyle,
     backgroundColor: isCourseUpdated ? "#007bff" : "#cccccc", // Disable the button if the course is not updated
-    cursor: isCourseUpdated ? "pointer" : "default", // Change cursor style based on button state
+    cursor: isCourseUpdated ? "pointer" : "default",
   };
 
   const handleFileUpload = async (e) => {
-    console.log(e.target.files, 'here')
     const formData = new FormData();
     formData.append('file', e.target.files[0]);
     const response = await fetch(
@@ -155,88 +163,120 @@ const CourseDetails = () => {
         body: formData
       }
     );
+    
+    const data = await response.json();
+    console.log("Uploaded Study Material Data:", data);
+    setUploadedMaterial(data.path);
+  };
 
-  }
+  const handleFileDownload = (uploadedMaterial) => {
+    if (uploadedMaterial) {
+      const downloadEndpoint = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=${uploadedMaterial}`;
 
-  const handleFileDownload = () => {
-    fetch(
-      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701714457927_7379990347.pdf`,
-      {
-        method: "GET",
+      fetch(downloadEndpoint, {
+        method: 'GET',
         headers: {
-          "authorization-token": localStorage.getItem("token"),
-          "userId": localStorage.getItem("userId"),
-          "userType": localStorage.getItem("userType"),
+          'authorization-token': localStorage.getItem('token'),
+          userId: localStorage.getItem('userId'),
+          userType: localStorage.getItem('userType'),
         },
-      }
-    )
-      .then((res) => res.blob())
-      .then((data) => {
-        const file = window.URL.createObjectURL(data);
-        window.open(file);
       })
-      .catch((error) => console.error("API error:", error));
+      .then((res) => res.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = uploadedMaterial; // set the download attribute with the desired file name
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch((error) => console.error('Error during file download:', error));
+    } else {
+      console.error('No study material uploaded');
+    }
   }
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1 style={{ textAlign: "center" }}>Selected Course: {course.name}</h1>
-      <div style={textStyle}>
-        <b>Course Description:</b>
-        <br />
-        <textarea
-          id="description"
-          style={textBoxStyle}
-          value={course.description}
-          disabled={!editMode}
-          onChange={handleDescriptionChange}
-        />
-      </div>
-      <div style={textStyle}>
-        <b>Syllabus:</b>
-        <br />
-        <textarea
-          id="syllabus"
-          style={textBoxStyle}
-          value={course.syllabus}
-          disabled={!editMode}
-          onChange={handleSyllabusChange}
-        />
-      </div>
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Upload Study Material
-        <input
-          type="file"
-          hidden
-          onChange={(e) => handleFileUpload(e)}
-        />
-      </Button>
-      <Button onClick={handleFileDownload}>
-        Download Study Material
-      </Button>
+    <h1 style={{ textAlign: "center" }}>Selected Course: {course.name}</h1>
+    <div style={textStyle}>
+      <b>Course Description:</b>
       <br />
-      <br />
-      <button style={buttonStyle} onClick={handleEditCourse}>
-        {!editMode ? "Edit Course" : "Cancel Edit"}
-      </button>
-      <button
-        style={publishButtonStyle}
-        onClick={handleSaveChanges}
-        disabled={!isCourseUpdated}
-      >
-        Publish Course
-      </button>
-      <button style={buttonStyle} onClick={handleEnrolledStudents}>
-        Enrolled Students
-      </button>
-      <button style={buttonStyle} onClick={handleGoBack}>
-        Go Back To Dashboard
-      </button>
+      <textarea
+        id="description"
+        style={textBoxStyle}
+        value={course.description}
+        disabled={!editMode}
+        onChange={handleDescriptionChange}
+      />
     </div>
-  );
+    <div style={textStyle}>
+      <b>Syllabus:</b>
+      <br />
+      <textarea
+        id="syllabus"
+        style={textBoxStyle}
+        value={course.syllabus}
+        disabled={!editMode}
+        onChange={handleSyllabusChange}
+      />
+    </div>
+    <Button
+      variant="contained"
+      component="label"
+      onClick={handleUploadMaterial} // Navigate to upload study material page
+    >
+      Upload Study Material
+      <input
+        type="file"
+        hidden
+        onChange={(e) => handleFileUpload(e)}
+      />
+    </Button>
+    {uploadedMaterial && (
+      <div>
+        <p>Uploaded Study Material:</p>
+        {uploadedMaterial.endsWith('.pdf') ? (
+          <Document file={uploadedMaterial}>
+            <Page pageNumber={1} />
+          </Document>
+        ) : uploadedMaterial.endsWith('.doc') ? (
+          <Viewer url={uploadedMaterial} />
+        ) : (
+          <iframe
+            title="Uploaded Material"
+            src={URL.createObjectURL(uploadedMaterial)}
+            width="100%"
+            height="600px"
+          />
+        )}
+      </div>
+    )}
+    {/* <Button onClick={() => handleFileDownload(uploadedMaterial)}>
+      Download Study Material
+    </Button> */}
+    <br />
+    <br />
+    <button style={buttonStyle} onClick={handleEditCourse}>
+      {!editMode ? "Edit Course" : "Cancel Edit"}
+    </button>
+    <button
+      style={publishButtonStyle}
+      onClick={handleSaveChanges}
+      disabled={!isCourseUpdated}
+    >
+      Publish Course
+    </button>
+    <button style={buttonStyle} onClick={() => handleEnrolledStudents(course)}>
+      Enrolled Students
+    </button>
+    <button style={buttonStyle} onClick={handleGoBack}>
+      Go Back To Dashboard
+    </button>
+  </div>
+);
 };
 
 export default CourseDetails;
+
