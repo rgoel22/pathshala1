@@ -47,7 +47,7 @@ export default function SignUp() {
 
       if (response.ok) {
         setAlert('Signup success!', 'success')
-        navigate('/admin');
+        navigate('/');
       } else {
         setAlert('Something went wrong', 'error')
         console.error('Signup failed');
