@@ -77,7 +77,9 @@ const StudentsDashboard = () => {
             }}
           >
             You have not enrolled in any courses yet. Please go to the
-            <Button className="buttonStyle"            >
+            <Button className="buttonStyle"
+              component={Link}
+              to="/student/allCourses" >
               All Courses Dashboard
             </Button>
             and enroll yourself into a course to see your courses.
