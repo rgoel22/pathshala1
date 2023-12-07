@@ -160,7 +160,7 @@ const CourseDetails = () => {
 
   const handleFileDownload = () => {
     fetch(
-      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701714457927_7379990347.pdf`,
+      `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/file/download?path=src/main/resources/uploadedFiles/1701934321914_certificate.pdf`,
       {
         method: "GET",
         headers: {
