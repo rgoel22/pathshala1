@@ -72,7 +72,7 @@ const InstructorDashboard = () => {
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
                   <CardContent>
-                    <Typography variant="h5" component="div">
+                    <Typography variant="h5" component="div" sx={{ color: "#d32f2f" }}>
                       {course.name}
                     </Typography>
                     <Avatar
@@ -81,16 +81,17 @@ const InstructorDashboard = () => {
                       sx={{ width: "auto", height: "auto" }}
                       variant="square"
                     />
-                    <Typography variant="body2">
+                    <Typography variant="body2" style={{minHeight:'6vw', maxHeight:'6vw'}}>
                       {course.description}
                     </Typography>
                   </CardContent>
-                  <CardActions sx={{ justifyContent: "end" }}>
+                  <CardActions sx={{ justifyContent: "flex-end" }}>
                     <Button
                       size="small"
                       color="primary"
                       variant="outlined"
                       onClick={() => handleViewCourse(course)}
+                      sx={{ backgroundColor: "#d32f2f", color: "#ffffff" }}
                     >
                       View Course
                     </Button>

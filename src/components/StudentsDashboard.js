@@ -87,7 +87,7 @@ const StudentsDashboard = () => {
                     sx={{ width: "auto", height: "auto" }}
                     variant="square"
                   />
-                  <Typography variant="body2" sx={{ color: "#333333" }}>
+                  <Typography variant="body2" sx={{ color: "#333333", minHeight:'6vw', maxHeight:'6vw'}}>
                     {course.description}
                   </Typography>
                 </CardContent>

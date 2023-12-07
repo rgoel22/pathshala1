@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Grid,
+  Paper,
+} from "@mui/material";
 
 const CourseDetails = () => {
   const [course, setCourse] = useState({});
@@ -22,19 +29,41 @@ const CourseDetails = () => {
     marginLeft: "10px", // Add margin-left to create horizontal space
   };
 
-  const textStyle = {
-    fontSize: "16px",
-    lineHeight: "1.5",
-    marginBottom: "10px",
+  const commonButtonStyle = {
+    padding: "12px 24px",
+    borderRadius: "5px",
+    fontWeight: "bold",
+    transition: "all 0.2s ease-in-out",
+    marginLeft: "10px",
   };
 
-  const textBoxStyle = {
-    width: "60%",
-    margin: "0 auto",
-    height: "100px",
-    padding: "10px",
-    border: "1px solid #ccc",
+  const primaryButtonStyle = {
+    ...commonButtonStyle,
+    backgroundColor: "#d32f2f",
+    color: "#ffffff",
+  };
+
+  const secondaryButtonStyle = {
+    ...commonButtonStyle,
+    backgroundColor: "#cccccc",
+    color: "#000000",
+  };
+
+  const headerStyle = {
     textAlign: "center",
+    marginBottom: "20px",
+    color: "#2c3e50", // Dark gray color for better readability
+  };
+
+  const paperStyle = {
+    padding: "20px",
+    marginBottom: "20px",
+    marginTop: "30px",
+  };
+
+  const textFieldStyle = {
+    width: "100%",
+    marginBottom: "20px",
   };
 
   useEffect(() => {
@@ -63,7 +92,7 @@ const CourseDetails = () => {
   };
 
   const handleSaveChanges = () => {
-    if (editMode && isCourseUpdated) {
+    if (editMode) {
       // Send updated course information to backend using API call
       fetch(
         `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses`,
@@ -179,63 +208,83 @@ const CourseDetails = () => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1 style={{ textAlign: "center" }}>Selected Course: {course.name} ({course.courseCode})</h1>
-      <div style={textStyle}>
-        <b>Course Description:</b>
-        <br />
-        <textarea
-          id="description"
-          style={textBoxStyle}
-          value={course.description}
-          disabled={!editMode}
-          onChange={handleDescriptionChange}
-        />
-      </div>
-      <div style={textStyle}>
-        <b>Syllabus:</b>
-        <br />
-        <textarea
-          id="syllabus"
-          style={textBoxStyle}
-          value={course.syllabus}
-          disabled={!editMode}
-          onChange={handleSyllabusChange}
-        />
-      </div>
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Upload Study Material
-        <input
-          type="file"
-          hidden
-          onChange={(e) => handleFileUpload(e)}
-        />
-      </Button>
-      <Button onClick={handleFileDownload}>
-        Download Study Material
-      </Button>
-      <br />
-      <br />
-      <button style={buttonStyle} onClick={handleEditCourse}>
-        {!editMode ? "Edit Course" : "Cancel Edit"}
-      </button>
-      <button
-        style={publishButtonStyle}
-        onClick={handleSaveChanges}
-        disabled={!isCourseUpdated}
-      >
-        Publish Course
-      </button>
-      <button style={buttonStyle} onClick={handleEnrolledStudents}>
-        Enrolled Students
-      </button>
-      <button style={buttonStyle} onClick={handleGoBack}>
-        Go Back To Dashboard
-      </button>
-    </div>
+    <Container>
+      <Paper elevation={3} style={paperStyle}>
+        <Typography variant="h4" style={headerStyle}>
+          Selected Course: {course.name} ({course.courseCode})
+        </Typography>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="description"
+              label="Course Description"
+              variant="outlined"
+              style={textFieldStyle}
+              value={course.description}
+              disabled={!editMode}
+              onChange={handleDescriptionChange}
+              multiline
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="syllabus"
+              label="Syllabus"
+              variant="outlined"
+              style={textFieldStyle}
+              value={course.syllabus}
+              disabled={!editMode}
+              onChange={handleSyllabusChange}
+              multiline
+            />
+          </Grid>
+        </Grid>
+
+        <Button
+          variant="contained"
+          component="label"
+          style={primaryButtonStyle}
+        >
+          Upload Study Material
+          <input type="file" hidden onChange={(e) => handleFileUpload(e)} />
+        </Button>
+
+        <Button onClick={handleFileDownload} style={primaryButtonStyle}>
+          Download Study Material
+        </Button>
+      </Paper>
+
+      <Grid container justifyContent="center" spacing={2}>
+        <Grid item>
+          <Button
+            style={editMode ? secondaryButtonStyle : primaryButtonStyle}
+            onClick={handleEditCourse}
+          >
+            {editMode ? "Cancel Edit" : "Edit Course"}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            style={!editMode ? secondaryButtonStyle : primaryButtonStyle}
+            onClick={handleSaveChanges}
+            disabled={editMode}
+          >
+            Publish Course
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button style={primaryButtonStyle} onClick={handleEnrolledStudents}>
+            Enrolled Students
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button style={primaryButtonStyle} onClick={handleGoBack}>
+            Go Back To Dashboard
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

@@ -26,13 +26,6 @@ const AllCourses = () => {
       });
   }, []);
 
-const [openModal, setOpenModal] = useState(false);
-
-const handleModalClose = () => {
-  setOpenModal(false);
-};
-
-
   return (
     <>
         <AppBar position="static">
@@ -61,7 +54,7 @@ const handleModalClose = () => {
                     sx={{ width: "auto", height: "auto" }}
                     variant="square"
                   />
-                  <Typography variant="body2">{course.description}</Typography>
+                  <Typography variant="body2" style={{minHeight:'6vw', maxHeight:'6vw'}}>{course.description}</Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'end' }}>
                   <Button size="small" color="primary" variant="outlined" href={`/courses/${course.id}`}>Enroll</Button>
@@ -71,9 +64,7 @@ const handleModalClose = () => {
           </Grid>
         ))}
       </Grid>
-      <Dialog open={openModal} onClose={handleModalClose}>
-        Hello
-      </Dialog>
+      
     </>
   );
 };

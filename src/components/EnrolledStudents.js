@@ -9,15 +9,37 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Loading from "./Loading";
 import { useLoading } from "../context/loadingContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const EnrolledStudents = () => {
+  const buttonStyle = {
+    backgroundColor: "#d32f2f",
+    color: "#ffffff",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "all 0.2s ease-in-out",
+    marginTop: '30px',
+    marginLeft: '45%',
+  };
+
+  const navigate = useNavigate();
+
   var user = JSON.parse(localStorage.getItem("user"));
   const [data, setData] = useState([]);
   const { courseId } = useParams();
   const { loading, setLoading } = useLoading();
 
+  const handleGoBack = () => {
+    // navigate(`/instructor/courseDetails/${course.id}`, {
+    //   state: { courseId: course.id },
+    // });
+  };
+
   useEffect(() => {
+
     setLoading(true);
     // Fetch data from the API when the component mounts
     fetch(`https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getEnrolledStudents/${courseId}`, {
@@ -39,10 +61,6 @@ const EnrolledStudents = () => {
       });
   }, []);
 
-  const handleDeleteClick = (id) => {
-    console.log(`Delete button clicked for id ${id}`);
-  };
-
   // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.
   const headers = [
     ["firstName", "First Name"],
@@ -54,15 +72,15 @@ const EnrolledStudents = () => {
   return (
     <>
       {loading && <Loading />}
-      <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
-        Manage Students
+      <Typography variant="h3" sx={{ marginBottom: "20px", color: "#d32f2f", textAlign: "center" }}>
+        Enrolled Students
       </Typography>
       <TableContainer
         component={Paper}
-        sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px" }}
+        sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"  }}
       >
         <Table stickyHeader>
-          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableHead sx={{ backgroundColor: "#ffffff" }}>
             <TableRow>
               {headers.map((header, index) => (
                 <TableCell key={index} sx={{ fontWeight: "bold" }}>
@@ -75,13 +93,17 @@ const EnrolledStudents = () => {
             {data.map((row) => (
               <TableRow key={row.id}>
                 {headers.map((header, index) => {
-                  return <TableCell key={index}>{row[header[0]]}</TableCell>;
+                  return <TableCell key={index} sx={{ color: "#333333" }}>
+                    {row[header[0]]}</TableCell>;
                 })}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <button style={buttonStyle} onClick={handleGoBack}>
+        Go Back To Course Details
+      </button>
     </>
   );
 };
