@@ -89,9 +89,9 @@ const InstructorTable = () => {
         data.splice(data.indexOf(modalData), 1)
         setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, 'success')
         setShowDeleteConfirm(false)
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1000);
       }).catch((err) => {
         setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
         setShowDeleteConfirm(false)
@@ -151,6 +151,9 @@ const InstructorTable = () => {
       })
       .catch((err) => console.log(err));
     handleModalClose();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.

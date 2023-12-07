@@ -150,7 +150,7 @@ function App() {
                   <Route path="/admin/manageUsers" element={<ManageUsers />} />
                   <Route
                     path="/admin/manageInstructor"
-                    element={<PrivateRoute><ManageInstructor /></PrivateRoute>}
+                    element={<ManageInstructor />}
                   />
                   <Route path="/admin/courses" element={<AddCourse />} />
                   <Route path="/student/allCourses" element={<AllCourses />} />
