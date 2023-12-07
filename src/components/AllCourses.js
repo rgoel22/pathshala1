@@ -4,14 +4,32 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import useAlert from '../hooks/useAlert';
 import { Avatar, Box, Card, CardActions, CardContent, Grid, Dialog } from '@mui/material';
 
 const AllCourses = () => {
   const [courses, setCourses] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const { setAlert } = useAlert();;
+  const handleEnrollCourse = (course) => {
+    fetch(`https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/enroll?userId=`+localStorage.getItem("userId") + `&courseId=${course.id}`,{
+     headers: {
+       "Content-Type": "application/json",
+       "authorization-token": localStorage.getItem("token"),
+       "userId": localStorage.getItem("userId"),
+       "userType": localStorage.getItem("userType"),
+     }
+   }).then((res) => {
+    setAlert('Successfully enrolled', 'success');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+   }).catch(e => {
+    setAlert('Something went wrong', 'error')
+   });
+   };
 
-  useEffect(() => {
-    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses', {
+   useEffect(() => {
+    fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/getUnEnrolledCourses?userId='+localStorage.getItem("userId"), {
       headers: {
         "Content-Type": "application/json",
         "authorization-token": localStorage.getItem("token"),
@@ -25,10 +43,6 @@ const AllCourses = () => {
         setCourses(data);
       });
   }, []);
-
-  const handleModalClose = () => {
-    setOpenModal(false);
-  };
 
   return (
     <>
@@ -67,8 +81,8 @@ const AllCourses = () => {
                     size="small"
                     color="primary"
                     variant="contained"
-                    href={`/courses/${course.id}`}
                     sx={{ backgroundColor: "#d32f2f", color: "#ffffff" }}
+                    onClick={()=> handleEnrollCourse(course)}
                   >
                     Enroll
                   </Button>
@@ -78,9 +92,6 @@ const AllCourses = () => {
           </Grid>
         ))}
       </Grid>
-      <Dialog open={openModal} onClose={handleModalClose}>
-        Hello
-      </Dialog>
     </>
   );
 };
