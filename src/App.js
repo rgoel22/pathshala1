@@ -130,7 +130,7 @@ function PrivateRoute(props) {
 function App() {
   const location = useLocation();
   return (
-    <MainLoading imageSrc={require("./assets/images/pathshala.jpg")}>
+    <MainLoading imageSrc={require("./assets/images/pathshala_bg.png")}>
       <LoadingProvider>
         <RouterProvider>
           <UserProvider>
