@@ -13,7 +13,6 @@ import {
   CardContent,
   Dialog,
   Grid,
-  IconButton,
 } from "@mui/material";
 
 const StudentsDashboard = () => {
@@ -25,6 +24,9 @@ const StudentsDashboard = () => {
   const handleViewCourse = (course) => {
     setModalData(course);
     setOpenModal(true);
+    navigate(`/student/courseDetails/${course.id}`, {
+      state: { courseId: course.id },
+    });
   };
 
   const handleModalClose = () => {
@@ -54,14 +56,16 @@ const StudentsDashboard = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#8B0000" }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "#ffffff" }}>
             Enrolled Courses
           </Typography>
           <Button
             color="inherit"
-            onClick={() => navigate("/student/allCourses")}
+            component={Link}
+            to="/student/allCourses"
+            sx={{ color: "#ffffff" }}
           >
             All Courses
           </Button>
@@ -81,7 +85,7 @@ const StudentsDashboard = () => {
             <Box sx={{ minWidth: 275 }}>
               <Card variant="outlined">
                 <CardContent>
-                  <Typography variant="h5" component="div">
+                  <Typography variant="h5" component="div" sx={{ color: "#8B0000" }}>
                     {course.name}
                   </Typography>
                   <Avatar
@@ -90,14 +94,17 @@ const StudentsDashboard = () => {
                     sx={{ width: "auto", height: "auto" }}
                     variant="square"
                   />
-                  <Typography variant="body2">{course.description}</Typography>
+                  <Typography variant="body2" sx={{ color: "#333333" }}>
+                    {course.description}
+                  </Typography>
                 </CardContent>
-                <CardActions sx={{ justifyContent: "end" }}>
+                <CardActions sx={{ justifyContent: "flex-end" }}>
                   <Button
                     size="small"
                     color="primary"
-                    variant="outlined"
+                    variant="contained"
                     onClick={() => handleViewCourse(course)}
+                    sx={{ backgroundColor: "#8B0000", color: "#ffffff" }}
                   >
                     View Course
                   </Button>
@@ -108,7 +115,7 @@ const StudentsDashboard = () => {
         ))}
       </Grid>
       <Dialog open={openModal} onClose={handleModalClose}>
-        Helo
+        Hello
       </Dialog>
     </>
   );

@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  IconButton,
+  AddIcon,
+  EditIcon,
+  DeleteIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  Typography,
+} from "./YourMuiComponents"; // Import your Mui components
+
 import Loading from "./Loading";
-import ConfirmDelete from './ConfirmDelete';
+import ConfirmDelete from "./ConfirmDelete";
 import { useLoading } from "../context/loadingContext";
 import useAlert from "../hooks/useAlert";
 
@@ -30,9 +33,9 @@ const InstrunctorTable = () => {
   const { loading, setLoading } = useLoading();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { setAlert } = useAlert();
+
   useEffect(() => {
     setLoading(true);
-    // Fetch data from the API when the component mounts
     fetch(
       "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/getInstructor",
       {
@@ -53,7 +56,7 @@ const InstrunctorTable = () => {
         console.error("Error fetching data:", error);
         setLoading(false);
       });
-  }, []);
+  }, [setLoading]);
 
   const handleEditClick = (row) => {
     setModalData(row);
@@ -70,42 +73,56 @@ const InstrunctorTable = () => {
 
   const handleDeleteClick = (id) => {
     setModalData(id);
-    setShowDeleteConfirm(true)
+    setShowDeleteConfirm(true);
   };
+
   const handleDeleteConfirm = () => {
     let url = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/deleteUser/${modalData.id}`;
     try {
       fetch(url, {
-        method: "DELETE", headers: {
+        method: "DELETE",
+        headers: {
           "Content-Type": "application/json",
           "authorization-token": localStorage.getItem("token"),
           "userId": localStorage.getItem("userId"),
-          "userType": localStorage.getItem("userType")
+          "userType": localStorage.getItem("userType"),
         },
-      }).then(newRow => {
-        data.splice(data.indexOf(modalData), 1)
-        setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, 'success')
-        setShowDeleteConfirm(false)
-      }).catch((err) => {
-        setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
-        setShowDeleteConfirm(false)
       })
+        .then(() => {
+          setData((prevData) =>
+            prevData.filter((item) => item.id !== modalData.id)
+          );
+          setAlert(
+            `${modalData.firstName} ${modalData.lastName} deleted`,
+            "success"
+          );
+          setShowDeleteConfirm(false);
+        })
+        .catch(() => {
+          setAlert(
+            `Error in deleting ${modalData.firstName} ${modalData.lastName}`,
+            "error"
+          );
+          setShowDeleteConfirm(false);
+        });
     } catch (err) {
-      setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
-      setShowDeleteConfirm(false)
+      setAlert(
+        `Error in deleting ${modalData.firstName} ${modalData.lastName}`,
+        "error"
+      );
+      setShowDeleteConfirm(false);
     }
-  }
+  };
+
   const handleDeleteCancel = () => {
-    setShowDeleteConfirm(false)
-  }
+    setShowDeleteConfirm(false);
+  };
 
   const handleModalClose = () => {
     setOpenModal(false);
   };
 
   const handleSaveData = () => {
-    // Handle saving data (add/edit) here
-    // You may want to send a request to your API to save the changes
     let newModalData = { ...modalData };
     let url =
       "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/";
@@ -136,18 +153,14 @@ const InstrunctorTable = () => {
     })
       .then((res) => res.json())
       .then((newRow) => {
-        setData((prev) => {
-          return prev.map((d) => {
-            if (newRow.id === d.id) return newModalData;
-            else return d;
-          });
-        });
+        setData((prev) =>
+          prev.map((d) => (newRow.id === d.id ? newModalData : d))
+        );
       })
       .catch((err) => console.log(err));
     handleModalClose();
   };
 
-  // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.
   const headers = [
     ["firstName", "First Name"],
     ["lastName", "Last Name"],
@@ -158,8 +171,13 @@ const InstrunctorTable = () => {
   return (
     <>
       {loading && <Loading />}
-      {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
-      <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
+      {showDeleteConfirm && (
+        <ConfirmDelete
+          handleDeleteCancel={handleDeleteCancel}
+          handleDeleteConfirm={handleDeleteConfirm}
+        />
+      )}
+      <Typography variant="h4" align="center" sx={{ margin: "20px", color: "#d32f2f" }}>
         Manage Instructors
       </Typography>
       <TableContainer
@@ -185,10 +203,9 @@ const InstrunctorTable = () => {
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                {headers.map((header, index) => {
-                  return <TableCell key={index}>{row[header[0]]}</TableCell>;
-                })}
-
+                {headers.map((header, index) => (
+                  <TableCell key={index}>{row[header[0]]}</TableCell>
+                ))}
                 <TableCell>
                   <IconButton
                     color="primary"
@@ -216,7 +233,6 @@ const InstrunctorTable = () => {
           {modalAction === "add" ? "Add Instructor" : "Edit Instructor"}
         </DialogTitle>
         <DialogContent>
-          {/* Add your input fields here */}
           <TextField
             label="First Name"
             value={modalData.firstName || ""}
@@ -253,7 +269,6 @@ const InstrunctorTable = () => {
             fullWidth
             margin="normal"
           />
-          {/* Add other fields as needed */}
         </DialogContent>
         <div style={{ padding: "10px", textAlign: "right" }}>
           <Button variant="outlined" onClick={handleModalClose}>

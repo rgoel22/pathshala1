@@ -22,8 +22,6 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
-
 const CourseTable = () => {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -45,10 +43,8 @@ const CourseTable = () => {
     }
 
     (async () => {
-
       if (active) {
         setOptions(autocompleteData);
-        // console.log(autocompleteData)
       }
     })();
 
@@ -59,7 +55,6 @@ const CourseTable = () => {
 
   useEffect(() => {
     setLoading(true);
-    // Fetch data from the API when the component mounts
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses', {
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +84,8 @@ const CourseTable = () => {
         "userType": localStorage.getItem("userType"),
       }
     })
-      .then(response => response.json()).then(result => {
+      .then(response => response.json())
+      .then(result => {
         console.log(result);
         setAutocompleteData(result);
         setLoading(false);
@@ -97,9 +93,7 @@ const CourseTable = () => {
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-
   const handleEditClick = useCallback((row) => {
-    // console.log(row, 'row')
     setModalData(row);
     setModalAction('edit');
     setOpenModal(true);
@@ -113,7 +107,7 @@ const CourseTable = () => {
   };
 
   const handleDeleteClick = (id) => {
-    setShowDeleteConfirm(true)
+    setShowDeleteConfirm(true);
   };
 
   const handleModalClose = () => {
@@ -121,46 +115,40 @@ const CourseTable = () => {
   };
 
   const handleSaveData = () => {
-    // Handle saving data (add/edit) here
-    // You may want to send a request to your API to save the changes
     let newModalData = {
       ...modalData,
       "id": selectedRowKey
     };
     let url = 'https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses';
     fetch(url, {
-      method: "POST", headers: {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json",
-
         "authorization-token": localStorage.getItem("token"),
         "userId": localStorage.getItem("userId"),
         "userType": localStorage.getItem("userType"),
-
-
       },
       body: JSON.stringify(newModalData)
-    }).then((res) => res.json()).then(newRow => {
-      setData(prev => {
-        return prev.map(d => {
-          if (newRow.id === d.id) return newModalData;
-          else return d;
-        })
-      });
-    }).catch((err) => console.log(err))
+    })
+      .then((res) => res.json())
+      .then(newRow => {
+        setData(prev => {
+          return prev.map(d => (newRow.id === d.id ? newModalData : d));
+        });
+      })
+      .catch((err) => console.log(err));
     handleModalClose();
   };
 
   const handleDeleteConfirm = () => {
-    console.log("handleDeleteConfirm")
     // TODO: make delete request
-  }
-  const handleDeleteCancel = () => {
-    setShowDeleteConfirm(false)
-  }
+  };
 
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+  };
 
   // Assuming data is an array of objects with fields like 'name', 'courseCode' etc.
-  let userId;
   const headers = [["name", 'Name'], ["courseCode", 'Course Code'], ["description", 'Description'], ["syllabus", 'Syllabus'],
   ['instructorName', 'Instructor Name']];
 
@@ -187,11 +175,11 @@ const CourseTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-
             {data.map((row) => (
               <TableRow key={row.id}>
-                {headers.map((header, index) => { return <TableCell key={index}>{row[header[0]]}</TableCell> })}
-
+                {headers.map((header, index) => (
+                  <TableCell key={index}>{row[header[0]]}</TableCell>
+                ))}
                 <TableCell>
                   <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(row)}>
                     <EditIcon />
@@ -202,14 +190,12 @@ const CourseTable = () => {
                 </TableCell>
               </TableRow>
             ))}
-
           </TableBody>
         </Table>
       </TableContainer>
       <Dialog open={openModal} onClose={handleModalClose}>
         <DialogTitle>{modalAction === 'add' ? 'Add Course' : 'Edit Course'}</DialogTitle>
         <DialogContent>
-          {/* Add your input fields here */}
           <TextField
             label="Name"
             value={modalData.name || ''}
@@ -246,16 +232,11 @@ const CourseTable = () => {
             id="instructor"
             sx={{ width: 300 }}
             open={open}
-            onOpen={() => {
-              setOpen(true);
-            }}
-            onClose={() => {
-              setOpen(false);
-            }}
-
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
             onChange={(event, value) => { value && setModalData({ ...modalData, instructorId: value.id, instructorName: value.firstName + " " + value.lastName }) }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            getOptionLabel={(option) => { return (option.firstName + " " + option.lastName) }}
+            getOptionLabel={(option) => (option.firstName + " " + option.lastName)}
             options={options}
             value={modalData.instructorId ? { firstName: modalData.instructorName, lastName: "" } : null}
             loading={autocompleteLoading}
@@ -275,7 +256,6 @@ const CourseTable = () => {
               />
             )}
           />
-          {/* Add other fields as needed */}
         </DialogContent>
         <div style={{ padding: '10px', textAlign: 'right' }}>
           <Button variant="outlined" onClick={handleModalClose}>Cancel</Button>
@@ -287,4 +267,5 @@ const CourseTable = () => {
     </>
   );
 };
+
 export default CourseTable;

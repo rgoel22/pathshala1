@@ -21,7 +21,7 @@ import StudentsDashboard from "./components/StudentsDashboard";
 import CourseDetails from "./components/CourseDetails";
 import AllCourses from "./components/AllCourses";
 import EnrolledStudents from "./components/EnrolledStudents";
-
+import StudentCourseDetails from "./components/StudentCourseDetails";
 import MainLoading from './components/MainLoading';
 
 
@@ -143,6 +143,7 @@ function App() {
                   <Route path="/instructor" element={<InstructorDashboard />} />
                   <Route path="/instructor/courseDetails/:courseId" element={<CourseDetails />} />
                   <Route path="/student" element={<StudentsDashboard />} />
+                  <Route path="/student/courseDetails/:courseId" element={<StudentCourseDetails />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/admin" element={<AdminPage />} />
                   <Route path="/admin/manageUsers" element={<ManageUsers />} />

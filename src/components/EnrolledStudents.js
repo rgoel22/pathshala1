@@ -57,26 +57,34 @@ const EnrolledStudents = () => {
       <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
         Manage Students
       </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px" }}
-      >
+      <TableContainer component={Paper} sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px" }}>
         <Table stickyHeader>
           <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
             <TableRow>
               {headers.map((header, index) => (
-                <TableCell key={index} sx={{ fontWeight: "bold" }}>
+                <TableCell key={index} sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
                   {header[1]}
                 </TableCell>
               ))}
+              <TableCell key="actions" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                {headers.map((header, index) => {
-                  return <TableCell key={index}>{row[header[0]]}</TableCell>;
-                })}
+                {headers.map((header, index) => (
+                  <TableCell key={index}>{row[header[0]]}</TableCell>
+                ))}
+                <TableCell key="actions">
+                  <button
+                    style={{ backgroundColor: "#d32f2f", color: "#fff", padding: "8px", borderRadius: "4px" }}
+                    onClick={() => handleDeleteClick(row.id)}
+                  >
+                    Delete
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
