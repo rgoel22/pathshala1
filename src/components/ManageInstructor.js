@@ -29,7 +29,7 @@ const InstrunctorTable = () => {
   const [selectedRowKey, setSelectedRowKey] = useState(null);
   const { loading, setLoading } = useLoading();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const { setAlert } = useAlert();;
+  const { setAlert } = useAlert();
   useEffect(() => {
     setLoading(true);
     // Fetch data from the API when the component mounts
@@ -112,8 +112,6 @@ const InstrunctorTable = () => {
     if (modalAction === "add") {
       newModalData = {
         ...newModalData,
-        rePassword: "Welcome@123",
-        password: "Welcome@123",
         userId: modalData.emailId,
         userType: "INSTRUCTOR",
       };
@@ -125,13 +123,6 @@ const InstrunctorTable = () => {
       };
       url = url + "updateUser";
     }
-
-    // setData(prev => {
-    //   return prev.map(d => {
-    //     if (newModalData.id === d.id) return newModalData;
-    //     else return d;
-    //   })
-    // });
 
     fetch(url, {
       method: "POST",

@@ -36,10 +36,7 @@ export default function SignIn(props) {
         setLoading(true);
 
         try {
-            await fetch("https://api.ipify.org/?format=json", {
-                mode: 'no-cors'
-            }).then((response) => response.json())
-                .then(data => body.ip = data.ip)
+            await fetch("https://api.ipify.org/?format=json").then((response) => response.json()).then(data => body.ip = data.ip)
 
             const response = await fetch(
                 "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/login",

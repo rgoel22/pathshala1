@@ -11,11 +11,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import Loading from "./Loading";
 import { useLoading } from "../context/loadingContext";
+import ConfirmDelete from './ConfirmDelete';
+import useAlert from "../hooks/useAlert";
 
 const MyTable = () => {
   var user = JSON.parse(localStorage.getItem("user"));
+  const [modalData, setModalData] = useState({});
   const [data, setData] = useState([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { loading, setLoading } = useLoading();
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setLoading(true);
@@ -40,8 +45,36 @@ const MyTable = () => {
   }, []);
 
   const handleDeleteClick = (id) => {
-    console.log(`Delete button clicked for id ${id}`);
+    setModalData(id);
+    setShowDeleteConfirm(true)
   };
+
+  const handleDeleteConfirm = () => {
+    let url = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/deleteUser/${modalData.id}`;
+    try {
+      fetch(url, {
+        method: "DELETE", headers: {
+          "Content-Type": "application/json",
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType")
+        },
+      }).then(newRow => {
+        data.splice(data.indexOf(modalData), 1)
+        setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, 'success')
+        setShowDeleteConfirm(false)
+      }).catch((err) => {
+        setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
+        setShowDeleteConfirm(false)
+      })
+    } catch (err) {
+      setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
+      setShowDeleteConfirm(false)
+    }
+  }
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false)
+  }
 
   // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.
   const headers = [
@@ -54,6 +87,7 @@ const MyTable = () => {
   return (
     <>
       {loading && <Loading />}
+      {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
       <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
         Manage Students
       </Typography>
@@ -83,7 +117,7 @@ const MyTable = () => {
                   <IconButton
                     color="secondary"
                     aria-label="delete"
-                    onClick={() => handleDeleteClick(row.userId)}
+                    onClick={() => handleDeleteClick(row)}
                   >
                     <DeleteIcon />
                   </IconButton>
