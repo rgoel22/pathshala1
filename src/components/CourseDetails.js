@@ -162,11 +162,6 @@ const CourseDetails = () => {
     return <div>Loading...</div>; // You may want to add a loading indicator
   }
 
-  const publishButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: isCourseUpdated ? "#007bff" : "#cccccc", // Disable the button if the course is not updated
-    cursor: isCourseUpdated ? "pointer" : "default", // Change cursor style based on button state
-  };
 
   const handleFileUpload = async (e) => {
     console.log(e.target.files, 'here')
@@ -268,7 +263,7 @@ const CourseDetails = () => {
           <Button
             style={!editMode ? secondaryButtonStyle : primaryButtonStyle}
             onClick={handleSaveChanges}
-            disabled={editMode}
+            disabled={!editMode}
           >
             Publish Course
           </Button>
