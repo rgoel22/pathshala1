@@ -180,7 +180,7 @@ const CourseDetails = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1 style={{ textAlign: "center" }}>Selected Course: {course.name}</h1>
+      <h1 style={{ textAlign: "center" }}>Selected Course: {course.name} ({course.courseCode})</h1>
       <div style={textStyle}>
         <b>Course Description:</b>
         <br />
