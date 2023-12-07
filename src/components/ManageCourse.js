@@ -21,6 +21,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
+import useAlert from "../hooks/useAlert";
 
 
 
@@ -36,6 +37,7 @@ const CourseTable = () => {
   const autocompleteLoading = open && options.length === 0;
   const [autocompleteData, setAutocompleteData] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     let active = true;
@@ -112,7 +114,8 @@ const CourseTable = () => {
     setOpenModal(true);
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (row) => {
+    setModalData(row);
     setShowDeleteConfirm(true)
   };
 
@@ -151,8 +154,27 @@ const CourseTable = () => {
   };
 
   const handleDeleteConfirm = () => {
-    console.log("handleDeleteConfirm")
-    // TODO: make delete request
+    let url = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/deleteCourse/${modalData.id}`;
+    try {
+      fetch(url, {
+        method: "DELETE", headers: {
+          "Content-Type": "application/json",
+          "authorization-token": localStorage.getItem("token"),
+          "userId": localStorage.getItem("userId"),
+          "userType": localStorage.getItem("userType")
+        },
+      }).then(newRow => {
+        data.splice(data.indexOf(modalData), 1)
+        setAlert(`${modalData.name}deleted`, 'success')
+        setShowDeleteConfirm(false)
+      }).catch((err) => {
+        setAlert(`Error in deleting ${modalData.name}`, 'error')
+        setShowDeleteConfirm(false)
+      })
+    } catch (err) {
+      setAlert(`Error in deleting ${modalData.name}`, 'error')
+      setShowDeleteConfirm(false)
+    }
   }
   const handleDeleteCancel = () => {
     setShowDeleteConfirm(false)
@@ -168,7 +190,7 @@ const CourseTable = () => {
     <>
       {loading && <Loading />}
       {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
-      <Typography variant="h4" align="center" sx={{ margin: '20px' }}>
+      <Typography variant="h3" sx={{ marginBottom: "20px", color: "#d32f2f", textAlign: "center" }}>
         Manage Courses
       </Typography>
       <TableContainer component={Paper} sx={{ maxWidth: '1000px', margin: 'auto', marginTop: '20px' }}>

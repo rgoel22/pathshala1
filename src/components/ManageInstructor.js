@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Loading from "./Loading";
-import ConfirmDelete from './ConfirmDelete';
+import ConfirmDelete from "./ConfirmDelete";
 import { useLoading } from "../context/loadingContext";
 import useAlert from "../hooks/useAlert";
 
-const InstrunctorTable = () => {
+const InstructorTable = () => {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -30,6 +32,7 @@ const InstrunctorTable = () => {
   const { loading, setLoading } = useLoading();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { setAlert } = useAlert();
+
   useEffect(() => {
     setLoading(true);
     // Fetch data from the API when the component mounts
@@ -68,8 +71,8 @@ const InstrunctorTable = () => {
     setOpenModal(true);
   };
 
-  const handleDeleteClick = (id) => {
-    setModalData(id);
+  const handleDeleteClick = (row) => {
+    setModalData(row);
     setShowDeleteConfirm(true)
   };
   const handleDeleteConfirm = () => {
@@ -159,7 +162,7 @@ const InstrunctorTable = () => {
     <>
       {loading && <Loading />}
       {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
-      <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
+      <Typography variant="h3" sx={{ marginBottom: "20px", color: "#d32f2f", textAlign: "center" }}>
         Manage Instructors
       </Typography>
       <TableContainer
@@ -273,4 +276,4 @@ const InstrunctorTable = () => {
   );
 };
 
-export default InstrunctorTable;
+export default InstructorTable;

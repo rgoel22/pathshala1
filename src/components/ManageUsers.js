@@ -11,11 +11,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import Loading from "./Loading";
 import { useLoading } from "../context/loadingContext";
-import ConfirmDelete from './ConfirmDelete';
+import ConfirmDelete from "./ConfirmDelete";
 import useAlert from "../hooks/useAlert";
 
 const MyTable = () => {
-  var user = JSON.parse(localStorage.getItem("user"));
   const [modalData, setModalData] = useState({});
   const [data, setData] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -31,7 +30,7 @@ const MyTable = () => {
         "authorization-token": localStorage.getItem("token"),
         "userId": localStorage.getItem("userId"),
         "userType": localStorage.getItem("userType"),
-      }
+      },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -46,37 +45,39 @@ const MyTable = () => {
 
   const handleDeleteClick = (id) => {
     setModalData(id);
-    setShowDeleteConfirm(true)
+    setShowDeleteConfirm(true);
   };
 
   const handleDeleteConfirm = () => {
     let url = `https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/deleteUser/${modalData.id}`;
     try {
       fetch(url, {
-        method: "DELETE", headers: {
+        method: "DELETE",
+        headers: {
           "Content-Type": "application/json",
           "authorization-token": localStorage.getItem("token"),
           "userId": localStorage.getItem("userId"),
-          "userType": localStorage.getItem("userType")
+          "userType": localStorage.getItem("userType"),
         },
-      }).then(newRow => {
-        data.splice(data.indexOf(modalData), 1)
-        setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, 'success')
-        setShowDeleteConfirm(false)
-      }).catch((err) => {
-        setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
-        setShowDeleteConfirm(false)
       })
+        .then((newRow) => {
+          data.splice(data.indexOf(modalData), 1);
+          setAlert(`${modalData.firstName} ${modalData.lastName} deleted`, "success");
+          setShowDeleteConfirm(false);
+        })
+        .catch((err) => {
+          setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, "error");
+          setShowDeleteConfirm(false);
+        });
     } catch (err) {
-      setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, 'error')
-      setShowDeleteConfirm(false)
+      setAlert(`Error in deleting ${modalData.firstName} ${modalData.lastName}`, "error");
+      setShowDeleteConfirm(false);
     }
-  }
+  };
   const handleDeleteCancel = () => {
-    setShowDeleteConfirm(false)
-  }
+    setShowDeleteConfirm(false);
+  };
 
-  // Assuming data is an array of objects with fields like 'firstName', 'lastName', 'email', 'phoneNumber', etc.
   const headers = [
     ["firstName", "First Name"],
     ["lastName", "Last Name"],
@@ -88,37 +89,31 @@ const MyTable = () => {
     <>
       {loading && <Loading />}
       {showDeleteConfirm && <ConfirmDelete handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} />}
-      <Typography variant="h4" align="center" sx={{ margin: "20px" }}>
+      <Typography variant="h3" sx={{ marginBottom: "20px", color: "#d32f2f", textAlign: "center" }}>
         Manage Students
       </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px" }}
-      >
+      <TableContainer component={Paper} sx={{ maxWidth: "800px", margin: "auto", marginTop: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
         <Table stickyHeader>
-          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableHead sx={{ backgroundColor: "#ffffff" }}>
             <TableRow>
               {headers.map((header, index) => (
-                <TableCell key={index} sx={{ fontWeight: "bold" }}>
+                <TableCell key={index} sx={{ fontWeight: "bold"}}>
                   {header[1]}
                 </TableCell>
               ))}
-              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: "bold"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                {headers.map((header, index) => {
-                  return <TableCell key={index}>{row[header[0]]}</TableCell>;
-                })}
-
+                {headers.map((header, index) => (
+                  <TableCell key={index} sx={{ color: "#333333" }}>
+                    {row[header[0]]}
+                  </TableCell>
+                ))}
                 <TableCell>
-                  <IconButton
-                    color="secondary"
-                    aria-label="delete"
-                    onClick={() => handleDeleteClick(row)}
-                  >
+                  <IconButton color="secondary" aria-label="delete" onClick={() => handleDeleteClick(row)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
