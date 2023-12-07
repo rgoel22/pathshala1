@@ -211,9 +211,9 @@ const CourseDetails = () => {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
+            <span>Course description</span>
             <TextField
               id="description"
-              label="Course Description"
               variant="outlined"
               style={textFieldStyle}
               value={course.description}
@@ -223,9 +223,9 @@ const CourseDetails = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+          <span>Course Syllabus</span>
             <TextField
               id="syllabus"
-              label="Syllabus"
               variant="outlined"
               style={textFieldStyle}
               value={course.syllabus}
