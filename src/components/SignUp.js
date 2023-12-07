@@ -13,7 +13,7 @@ import { useLoading } from '../context/loadingContext';
 import Loading from './Loading';
 import useAlert from '../hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 const defaultTheme = createTheme();
 
@@ -58,6 +58,9 @@ export default function SignUp() {
       setLoading(false);
     }
   };
+
+ 
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -118,7 +121,8 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  {...register("email", { required: "Email is required" })}
+                  {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })}
+                 // {errors.email && <span>Invalid email</span>}
                   error={!!errors.email}
                   helperText={errors.email?.message}
                 />

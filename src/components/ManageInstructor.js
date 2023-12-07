@@ -222,40 +222,66 @@ const InstructorTable = () => {
           {/* Add your input fields here */}
           <TextField
             label="First Name"
-            value={modalData.firstName || ""}
-            onChange={(e) =>
-              setModalData({ ...modalData, firstName: e.target.value })
-            }
+            value={modalData.firstName || ''}
+            onChange={(e) => setModalData({ ...modalData, firstName: e.target.value })}
             fullWidth
             margin="normal"
+            required  // Adding the required attribute
+            error={!modalData.firstName} // Checking for the presence of the first name
+            helperText={!modalData.firstName ? 'First name is required' : ''} // Error message when the field is empty
           />
+
           <TextField
             label="Last Name"
-            value={modalData.lastName || ""}
-            onChange={(e) =>
-              setModalData({ ...modalData, lastName: e.target.value })
-            }
+            value={modalData.lastName || ''}
+            onChange={(e) => setModalData({ ...modalData, lastName: e.target.value })}
             fullWidth
             margin="normal"
+            required // Adding the required attribute
+            error={!modalData.lastName} // Checking for the presence of the last name
+            helperText={!modalData.lastName ? 'Last Name is required' : ''} // Error message when the field is empty
           />
+
           <TextField
             label="Email ID"
-            value={modalData.emailId || ""}
+            value={modalData.emailId || ''}
             onChange={(e) =>
               setModalData({ ...modalData, emailId: e.target.value })
             }
             fullWidth
             margin="normal"
+            required
+            inputProps={{
+              pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}',
+              title: 'Please enter a valid email address'
+            }}
+            error={!modalData.emailId || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(modalData.emailId)}
+            helperText={!modalData.emailId || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(modalData.emailId) ? 'Please enter a valid email address' : ''}
           />
+
+
           <TextField
             label="Phone Number"
-            value={modalData.phoneNumber || ""}
-            onChange={(e) =>
-              setModalData({ ...modalData, phoneNumber: e.target.value })
-            }
+            value={modalData.phoneNumber || ''}
+            onChange={(e) => {
+              const re = /^[0-9\b]+$/; // Regex to allow only numbers
+              if (e.target.value === '' || re.test(e.target.value)) {
+                setModalData({ ...modalData, phoneNumber: e.target.value });
+              }
+            }}
             fullWidth
             margin="normal"
+            required
+            error={!modalData.phoneNumber}
+            helperText={!modalData.phoneNumber ? 'Phone Number is required' : ''}
+            inputProps={{
+              inputMode: 'numeric',
+              pattern: '[0-9]*',
+              maxLength: 10, // Optional: set maximum length if needed
+            }}
           />
+
+
           {/* Add other fields as needed */}
         </DialogContent>
         <div style={{ padding: "10px", textAlign: "right" }}>
