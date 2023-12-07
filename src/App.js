@@ -23,6 +23,7 @@ import AllCourses from "./components/AllCourses";
 import EnrolledStudents from "./components/EnrolledStudents";
 import StudentCourseDetails from "./components/StudentCourseDetails";
 import MainLoading from './components/MainLoading';
+import StudentCourseView from "./components/StudentCourseView";
 
 
 function CourseForm(props) {
@@ -154,6 +155,7 @@ function App() {
                   <Route path="/admin/courses" element={<AddCourse />} />
                   <Route path="/student/allCourses" element={<AllCourses />} />
                   <Route path="/instructor/courseDetails/enrolledStudents/:courseId" element={<EnrolledStudents />} />
+                  <Route path="/student/viewCourse/:courseId" element={<StudentCourseView/>} />
                 </Routes>
               </AlertProvider>
             </CoursesProvider>

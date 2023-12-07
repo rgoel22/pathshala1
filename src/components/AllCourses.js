@@ -3,13 +3,14 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAlert from '../hooks/useAlert';
 import { Avatar, Box, Card, CardActions, CardContent, Grid, Dialog } from '@mui/material';
 
 const AllCourses = () => {
   const [courses, setCourses] = useState([]);
-  const { setAlert } = useAlert();;
+  const { setAlert } = useAlert();
+  const navigate = useNavigate();
   const handleEnrollCourse = (course) => {
     fetch(`https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/enroll?userId=`+localStorage.getItem("userId") + `&courseId=${course.id}`,{
      headers: {
@@ -27,6 +28,12 @@ const AllCourses = () => {
     setAlert('Something went wrong', 'error')
    });
    };
+
+   const handleViewCourse = (course) => {
+    navigate(`/student/viewCourse/${course.id}`, {
+      state: { courseId: course.id },
+    });
+  };
 
    useEffect(() => {
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses/getUnEnrolledCourses?userId='+localStorage.getItem("userId"), {
@@ -77,6 +84,15 @@ const AllCourses = () => {
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
+                <Button
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    sx={{ backgroundColor: "#d32f2f", color: "#ffffff" }}
+                    onClick={()=> handleViewCourse(course)}
+                  >
+                    View Course
+                  </Button>
                   <Button
                     size="small"
                     color="primary"
