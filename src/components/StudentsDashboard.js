@@ -64,17 +64,27 @@ const StudentsDashboard = () => {
           </Button>
         </Toolbar>
       </AppBar>
-
-      <Grid
-        container
-        spacing={8}
-        height="100vh"
-        direction="row"
-        alignItems="center"
-        p={10}
-      >
-        {courses.map((course) => (
-          <Grid item xs={4} key={course.id}>
+      <Grid container spacing={8} height="10vh" direction="row" alignItems="center" p={10}>
+        {courses.length === 0 ? (
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              textAlign: "center", 
+              marginTop: "10px", // reduced top margin
+              gridColumn: "1 / -1",
+              fontSize: "1.5rem", // larger font size
+              fontWeight: "bold", // bold font weight
+            }}
+          >
+            You have not enrolled in any courses yet. Please go to the
+            <Button className="buttonStyle"            >
+              All Courses Dashboard
+            </Button>
+            and enroll yourself into a course to see your courses.
+          </Typography>
+        ) : (
+          courses.map((course) => (
+            <Grid item xs={4} key={course.id}>
             <Box sx={{ minWidth: 275 }}>
               <Card variant="outlined">
                 <CardContent>
@@ -104,8 +114,9 @@ const StudentsDashboard = () => {
                 </CardActions>
               </Card>
             </Box>
-          </Grid>
-        ))}
+            </Grid>
+          ))
+        )}
       </Grid>
     </>
   );
