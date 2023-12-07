@@ -3,12 +3,12 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link, useNavigate } from 'react-router-dom';
-import { useUser } from '../context/user/user.context';
-import { Avatar, Box, Card, CardActions, CardContent, Grid, IconButton, Dialog } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Avatar, Box, Card, CardActions, CardContent, Grid, Dialog } from '@mui/material';
 
 const AllCourses = () => {
   const [courses, setCourses] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     fetch('https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/courses', {
@@ -26,16 +26,20 @@ const AllCourses = () => {
       });
   }, []);
 
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
-        <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#d32f2f" }}>
         <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "#ffffff" }}>
             All Courses
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-            <Link to="/student" style={{ color: 'white', textDecoration: 'none' }}>Enrolled Courses</Link>
-            </Box>
+          <Link to="/student" style={{ color: '#ffffff', textDecoration: 'none' }}>
+            <Button color="inherit">Enrolled Courses</Button>
+          </Link>
         </Toolbar>
         </AppBar>
 
@@ -45,7 +49,7 @@ const AllCourses = () => {
             <Box sx={{ minWidth: 275 }}>
               <Card variant="outlined">
                 <CardContent>
-                  <Typography variant="h5" component="div">
+                  <Typography variant="h5" component="div" sx={{ color: "#d32f2f" }}>
                     {course.name}
                   </Typography>
                   <Avatar
@@ -54,17 +58,29 @@ const AllCourses = () => {
                     sx={{ width: "auto", height: "auto" }}
                     variant="square"
                   />
-                  <Typography variant="body2" style={{minHeight:'6vw', maxHeight:'6vw'}}>{course.description}</Typography>
+                  <Typography variant="body2" sx={{ color: "#333333" ,minHeight:'6vw', maxHeight:'6vw'}}>
+                    {course.description}
+                  </Typography>
                 </CardContent>
-                <CardActions sx={{ justifyContent: 'end' }}>
-                  <Button size="small" color="primary" variant="outlined" href={`/courses/${course.id}`}>Enroll</Button>
+                <CardActions sx={{ justifyContent: 'flex-end' }}>
+                  <Button
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    href={`/courses/${course.id}`}
+                    sx={{ backgroundColor: "#d32f2f", color: "#ffffff" }}
+                  >
+                    Enroll
+                  </Button>
                 </CardActions>
               </Card>
             </Box>
           </Grid>
         ))}
       </Grid>
-      
+      <Dialog open={openModal} onClose={handleModalClose}>
+        Hello
+      </Dialog>
     </>
   );
 };

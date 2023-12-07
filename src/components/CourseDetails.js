@@ -13,9 +13,7 @@ const CourseDetails = () => {
   const [course, setCourse] = useState({});
   const { courseId } = useParams();
   const navigate = useNavigate();
-
   const [editMode, setEditMode] = useState(false);
-  const [isCourseUpdated, setIsCourseUpdated] = useState(false);
 
   const buttonStyle = {
     backgroundColor: "#007bff",
@@ -52,7 +50,7 @@ const CourseDetails = () => {
   const headerStyle = {
     textAlign: "center",
     marginBottom: "20px",
-    color: "#2c3e50", // Dark gray color for better readability
+    color: "#d32f2f"
   };
 
   const paperStyle = {
@@ -88,7 +86,7 @@ const CourseDetails = () => {
 
   const handleEditCourse = () => {
     setEditMode(!editMode); // Toggle edit mode
-    setIsCourseUpdated(false); // Reset the 'isCourseUpdated' flag
+
   };
 
   const handleSaveChanges = () => {
@@ -112,7 +110,7 @@ const CourseDetails = () => {
           console.log("API response:", data);
           setCourse(data); // Update the 'course' state variable with the updated data
           setEditMode(false); // Reset edit mode
-          setIsCourseUpdated(false); // Reset the 'isCourseUpdated' flag
+
         })
         .catch((error) => console.error("API error:", error));
     }
@@ -121,13 +119,13 @@ const CourseDetails = () => {
   const handleDescriptionChange = (event) => {
     const updatedCourse = { ...course, description: event.target.value };
     setCourse(updatedCourse);
-    setIsCourseUpdated(true); // Set the 'isCourseUpdated' flag to true
+
   };
 
   const handleSyllabusChange = (event) => {
     const updatedCourse = { ...course, syllabus: event.target.value };
     setCourse(updatedCourse);
-    setIsCourseUpdated(true); // Set the 'isCourseUpdated' flag to true
+
   };
 
   const handleGoBack = () => {
@@ -206,7 +204,7 @@ const CourseDetails = () => {
     <Container>
       <Paper elevation={3} style={paperStyle}>
         <Typography variant="h4" style={headerStyle}>
-          Selected Course: {course.name} ({course.courseCode})
+          {course.name} ({course.courseCode})
         </Typography>
 
         <Grid container spacing={3}>
