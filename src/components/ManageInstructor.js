@@ -108,10 +108,12 @@ const InstrunctorTable = () => {
     // You may want to send a request to your API to save the changes
     let newModalData = { ...modalData };
     let url =
-      "http://localhost:8080/pathshala/user/";
+      "https://pathshala-api-8e4271465a87.herokuapp.com/pathshala/user/";
     if (modalAction === "add") {
       newModalData = {
         ...newModalData,
+        rePassword: "Welcome@123",
+        password: "Welcome@123",
         userId: modalData.emailId,
         userType: "INSTRUCTOR",
       };
